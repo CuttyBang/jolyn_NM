@@ -1,0 +1,118 @@
+<div data-section-id="{{ section.id }}" data-section-type="product" itemscope itemtype="http://schema.org/Product">
+  <section class="ambassador{% if section.settings.reversed %} layout-reversed{% endif %}" style="background-image: url({{ section.settings.image | img_url: 'master' }});">
+    <header>
+      <h1>{{ section.settings.title }}</h1>
+    </header>
+
+    <h1>{{ section.settings.name }}</h1>
+
+    <div class="contents">
+      <ul>
+        {% for block in section.blocks %}
+          {% if block.settings.highlight %}
+            <li>{{ block.settings.highlight }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+      <div class="description">
+        {{ section.settings.description }}
+      </div>
+
+      {% if section.settings.url != "" %}
+        <p class="read-more">
+          <a href="{{ section.settings.url }}">Read More &rarr;</a>
+        </p>
+      {% endif %}
+    </div>
+
+  </section>
+</div>
+
+  <style type="text/css">
+    @media (min-width: 768px) {
+      section.ambassador:before,
+      section.ambassador .contents {
+        width: {{ section.settings.width }}%;
+      }
+      
+      {% if section.settings.reversed %}
+      	section.ambassador .contents,
+        section.ambassador > h1,
+	    section.ambassador header {
+          padding-left: calc(100% - {{ section.settings.width }}%);
+          width: 100% !important;
+        }
+      {% endif %}
+    }
+  </style>
+
+  <!-- https://help.shopify.com/themes/development/theme-editor/settings-schema -->
+
+{% schema %}
+  {
+    "name": "Spotlight",
+    "blocks": [
+      {
+        "type": "button",
+        "name": "Highlight",
+        "settings": [
+          {
+            "id": "highlight",
+            "type": "text",
+            "label": "Highlight",
+            "placeholder": "2014 AVP Best Blocker..."
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "id": "title",
+        "type": "text",
+        "label": "Spotlight Section Name",
+        "placeholder": "Ambassador Spotlight",
+        "default": "Ambassador Spotlight"
+      },
+      {
+        "id": "name",
+        "type": "text",
+        "label": "Name",
+        "placeholder": "Full Name"
+      },
+      {
+        "id": "description",
+        "type": "textarea",
+        "info": "Wrap with <p>...</p>",
+        "label": "Description"
+      },
+      {
+        "id": "image",
+        "type": "image_picker",
+        "label": "Background Image"
+      },
+      {
+        "type": "range",
+        "id": "width",
+        "min": 30,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Content Width",
+        "default": 60
+      },
+	  {
+		"id": "reversed",
+		"type": "checkbox",
+		"label": "Reverse layout",
+		"info": "Anchors content to right side"
+      },
+      {
+        "id": "url",
+        "type": "text",
+        "label": "Read More URL",
+        "placeholder": "http://"
+      }
+    ]
+  }
+{% endschema %}

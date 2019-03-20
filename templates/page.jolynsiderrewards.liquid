@@ -1,0 +1,155 @@
+{% assign doublePointsArray = "dayno-onesie-mango-blueberry|swim-cap-start|printed-egan-sports-bra-crater|printed-vent-top-architect|printed-andy-bottom-architect" | split: "|" %}
+
+{% comment %}
+IMPORTANT: nav header URL is /pages/jolynsider, but account menu is /pages/jolynsider-rewards so we can have separate layouts.
+Copy any changes from here into page.rewards.liquid
+{% endcomment %}
+
+<div class="water-bar">
+  <div class="container">
+    <h2>
+    {% if customer.first_name != blank %}
+      {{ customer.first_name }}'s Account     
+      {% else %}
+      Account
+      {% endif %}</h2>    
+  </div>
+</div>
+
+<div class="container">
+  <div class="j-form account-page">
+    
+    <div class="flex reversed">
+      <aside>
+		{% include 'nav-account' %}
+      </aside>
+      
+      <div>
+		<div data-lion-account></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{% comment %}
+<div class="container">
+  
+  <div class="jolys-section jolys-1 jolys-top">
+    <header>
+      <h1 class="page-title">{{ page.title }}</h1>
+  	</header>
+    <div class="jolys-subtitle">
+      <p>An exclusive and elite rewards program for very special people, aka you!</p>
+    </div>
+    {% if customer %}
+    <div class="jolys-rewards-loggedin">
+      <div data-lion-account></div>
+    </div>
+    {% else %}
+    <div class="jolys-rewards-account">
+      <a href="/account/register"><div class="join"><p>JOIN</p></div></a>
+      <a href="/account/login"><div class="login"><p>LOGIN</p></div></a>
+    </div>
+    {% endif %}
+  </div>
+  <div class="jolys-section jolys-2" >
+    <div class="section-heading">
+      <h3 class="heading-text"><span>BENEFITS OF BEING A JOLYNSIDER...</span></h3>
+    </div>
+    <div class="section-contents sc-col3">
+      <div class="sc-block sc1">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/buttondollar.gif"/>
+        <div class="caption">Earn 5 points per dollar spent</div>
+      </div>
+      <div class="sc-block sc2">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/cupcake.gif"/>
+        <div class="caption">Birthday rewards</div>
+      </div>
+      <div class="sc-block sc3">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/calendar.gif"/>
+        <div class="caption">Exclusive access to MEMBERS ONLY offers & events</div>
+      </div>
+    </div>
+  </div>
+  <div class="jolys-section jolys-3">
+    <div class="section-heading">
+      <h3 class="heading-text"><span>GO FOR GOLD STATUS</span></h3>
+      <p class="subh">Earn 5,000+ points to become a GOLD member</p>
+    </div>   
+    <div class="section-contents sc-col3">
+      <div class="sc-block sc1">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/truck.gif"/>
+        <div class="caption">FREE standard shipping on all orders</div>
+      </div>
+      <div class="sc-block sc2">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/questionmark.gif" height="237"/>
+        <div class="caption">EXCLUSIVE GOLD member prizes</div>
+      </div>
+      <div class="sc-block sc3">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/narwhales.gif"/>
+        <div class="caption">Earn double points on items of the month</div>
+      </div>
+    </div> 
+    {% if customer %}
+      {% for tag in customer.tags %}
+        {% if tag contains 'GOLD' %}
+        <div class="double-points">
+          <h3 class="double-header">{{ "now" | date: "%B" }} Double Point Products</h3>
+          {% for productTitle in doublePointsArray %}
+            {% assign product = all_products[productTitle] %}
+            <div class="double-product">
+              <a href="{{ product.url }}"><img src="{{ product.featured_image | img_url: '150x' }}" /></a><br />
+              <a href="{{ product.url }}"><span class="product-name">{{ product.title }}</span></a>
+            </div>
+          
+		  {% endfor %}	
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="jolys-section jolys-1">
+    
+  </div>
+  <div class="jolys-section jolys-2 jolys-bottom">
+    <div class="section-heading">
+      <h3 class="heading-text"><span>PUT MORE POINTS ON THE BOARD</span></h3>
+    </div>  
+    <div class="section-contents sc-col5">
+      <div class="sc-block sc1">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/computer.gif"/>
+        <div class="caption">Create an Account</div>
+      </div>
+      <div class="sc-block sc2">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/envelope.gif"/>
+        <div class="caption">Sign Up for our Newsletter</div>
+      </div>
+      <div class="sc-block sc3">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/dollarbillbuttons.gif"/>
+        <div class="caption">Buy Stuff</div>
+      </div>
+      <div class="sc-block sc4">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/thumbsup.gif"/>
+        <div class="caption">Refer a Friend!</div>
+      </div>
+      <!--<div class="sc-block sc5">
+        <img src="https://cdn.shopify.com/s/files/1/0703/0099/files/stars.gif"/>
+        <div class="caption">Leave a Review</div>
+      </div>-->
+    </div>    
+  </div>
+  
+
+  <div class="rte">
+    {{ page.content }}
+  </div>
+
+
+
+</div>
+
+{% endcomment %}

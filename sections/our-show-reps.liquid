@@ -1,0 +1,65 @@
+
+{% assign _section = section.settings %}
+
+{% assign blog = blogs[_section.osr_blog] %}
+
+<section id="our_show_reps"> 
+    <div class="osr_hero" style="background-image: url({{ _section.hero_img | img_url: '1200x' }});"> 
+
+    </div>
+    <div class="osr_main_content">
+        <div class="osr_title">
+            <h2 class="title">{{ _section.page_title }}</h2>
+            <p>{{ _section.subtitle_pargraph }}</p>
+        </div>
+        <div class="osr_reps">
+            {% paginate blog.articles by 12 %}
+                {% for article in blog.articles %}
+                    <div class="rep">
+                        <div class="rep_thumb">
+                            <a href="{{ article.url }}" ><img src="{{ article.image.src | img_url: '500x' }}"></a>
+                        </div>
+                        <div class="rep_desc">
+                            <span class="rep_name">{{ article.title }}</span>
+                            <span class="rep_title">{{ article.content }}</span>
+                            <span class="rep_subtitle">{{ article.excerpt }}</span>
+                            <a href="http://instagram.com/_u/{{ article.metafields.instagram.handle }}/" class="rep_social">@{{ article.metafields.instagram.handle }}</a>
+                            <a href="{{ article.url }}" class="rep_read_more">Read More</a>
+                        </div>
+                    </div>                    
+                {% endfor %}
+            {% endpaginate %}
+        </div>
+    </div>
+</section> 
+
+{% schema %}
+  {
+    "name": "Our Show Reps",
+    "settings": [
+        {
+            "type": "blog",
+            "id": "osr_blog",
+            "label": "Our Show Reps Blog", 
+            "info": "Our Show Reps Blog"
+        },
+        {
+            "type": "image_picker",
+            "id": "hero_img",
+            "label": "Hero Image"
+        },
+        {
+            "type": "text",
+            "id": "page_title",
+            "label": "Page Title",
+            "default": "Our Show Reps"
+        },
+        {
+            "type": "text",
+            "id": "subtitle_pargraph",
+            "label": "Subtitle Paragraph",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at imperdiet augue. Aliquam finibus elementum imperdiet. Morbi vel augue eget lectus vehicula tristique."
+        }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,89 @@
+<div data-section-id="{{ section.id }}" data-section-type="product" itemscope itemtype="http://schema.org/Product">
+
+  <section class="lookbooks cards box">
+    {% unless template == 'index' %}
+    <div class="crumb">
+      <a href="/">{% include 'icon-j-home' %} Home</a> <strong>Shop Lookbooks</strong>
+    </div>
+    {% endunless %}
+    <header>
+      <h1>Shop Lookbooks <a href="/pages/lookbooks" style="color: #fff;">&nbsp;&nbsp;</a></h1>
+      <aside>
+        {% if template == 'index' %}
+        <a href="/pages/lookbooks">All Lookbooks &rarr;</a>
+        {% endif %}
+      </aside>
+    </header>
+
+    <div class="lookbooks-container">
+      <ul class="">
+        {% for block in section.blocks %}
+          {% comment %}
+            This is shared between homepage lookbooks horizontal scroll slider and the All Lookbooks page.
+            Because the top image on the All Lookbooks page is full width, we need a higher quality image that the small thumbnail.
+            So, if it's the first item AND it's on the lookbooks page, then show the big image. Otherwise, small will do!
+          {% endcomment %}
+          {% if forloop.first == true and page.handle == "lookbooks" %}
+            <li class="first-lookbook">
+              <a href="{{ block.settings.url }}" style="background-image: url({{ block.settings.image | img_url: 'master' }});">
+                <img src="{{ block.settings.image | img_url: 'master' }}" />
+                {% if block.settings.name %}
+                  <h1>{{ block.settings.name }}</h1>
+                {% endif %}
+              </a>
+            </li>
+
+            <!-- 
+              master:    {{ block.settings.image | img_url: 'master ' }}
+              2048x2048: {{ block.settings.image | img_url: '2048x2048 ' }}
+              1024x1024: {{ block.settings.image | img_url: '1024x1024 ' }}
+              large:     {{ block.settings.image | img_url: 'large ' }}
+            -->
+          {% else %}
+            <li>
+              <a href="{{ block.settings.url }}" style="background-image: url({{ block.settings.image | img_url: '640x' }});">
+                {% if block.settings.name %}
+                  <h1>{{ block.settings.name }}</h1>
+                {% endif %}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
+  </section>
+</div>
+
+<!-- https://help.shopify.com/themes/development/theme-editor/settings-schema -->
+
+{% schema %}
+  {
+    "name": "Lookbooks",
+    "blocks": [
+      {
+        "type": "button",
+        "name": "Lookbook",
+        "settings": [
+          {
+            "id": "image",
+            "type": "image_picker",
+            "label": "Cover Photo"
+          },
+          {
+            "id": "name",
+            "type": "text",
+            "label": "Lookbook Name",
+            "placeholder": "Name"
+          },
+          {
+            "id": "url",
+            "type": "text",
+            "label": "Lookbook URL",
+            "placeholder": "http://"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

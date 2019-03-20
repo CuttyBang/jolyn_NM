@@ -1,0 +1,170 @@
+
+
+<div id="nate1" class="SS page-width feature-row">
+  {% capture image_layout %}
+    <div id="nate2" class="SS feature-row__item" st>
+      {% if section.settings.image != blank %}
+        {% capture img_id %}FeatureRowImage-{{ section.id }}{% endcapture %}
+        {% capture wrapper_id %}FeatureRowImageWrapper-{{ section.id }}{% endcapture %}
+        {%- assign img_url = section.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+        {% include 'image-style' with image: section.settings.image, width: 545, height: 545, small_style: true, wrapper_id: wrapper_id, img_id: img_id %}
+        <div id="{{ wrapper_id }}" class="SS feature-row__image-wrapper js">
+          <div style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100}}%;">
+            <img id="{{ img_id }}"
+                 class="feature-row__image lazyload"
+                 src="{{ section.settings.image | img_url: '200x200' }}"
+                 data-src="{{ img_url }}"
+                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                 data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ section.settings.image.alt | escape }}">
+          </div>
+        </div>
+
+        <noscript>
+          {{ section.settings.image | img_url: '600x600', scale: 2 | img_tag: section.settings.image.alt, 'feature-row__image' }}
+        </noscript>
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+  {% endcapture %}
+
+  <div class="SS feature-row" style="padding: 25px;background-color: {{section.settings.background}} !important;">
+    {% if section.settings.layout == 'left' %}
+      {{ image_layout }}
+    {% endif %}
+
+    <div class="SS feature-row__item feature-row__text feature-row__text--{{ section.settings.layout }}">
+      {% if section.settings.headline != blank %}
+        <h1 style="color: {{section.settings.headline_color}} !important;">{{ section.settings.headline | escape }}</h1>
+      {% endif %}
+
+      {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="SS btn" style="padding: 15px 45px; background-color:{{section.settings.button_background}} !important;color: {{section.settings.button_text_color}} !important;">
+          {{ section.settings.button_text | escape }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.layout == 'right' %}
+      {{ image_layout }}
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": {
+    "en": "Promo ROW"
+
+  },
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background",
+      "label": {
+        "en": "Background color"
+      },
+      "default": "#5585ff"
+     },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": {
+        "en": "Image"
+      }
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": {
+        "en": "Image alignment"
+      },
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": {
+            "en": "Left"
+
+          }
+        },
+        {
+          "value": "right",
+          "label": {
+            "en": "Right"
+          }
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": {
+        "en": "Headline"
+      },
+      "default": {
+        "en": "SHOP THE NEW ONESIE"
+      }
+    },
+    {
+      "type": "color",
+      "id": "headline_color",
+      "label": {
+        "en": "Headline color"
+      },
+      "default": "#000"
+     },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": {
+        "en": "Button text"
+      },
+      "default": "See More"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": {
+        "en": "Button text color"
+      },
+      "default": "#fff"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": {
+        "en": "Button link"
+      }
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": {
+        "en": "Button background"
+      },
+      "default": "#fff"
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Promo ROW"
+      },
+      "category": {
+        "en": "Image"
+      }
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

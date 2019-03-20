@@ -1,0 +1,120 @@
+<div class="SS page-width">
+  <div class="SS collection-grid">
+    <ul class="SS grid grid--uniform">
+      {% for block in section.blocks limit: section.blocks.size %}
+        <li class="SS grid__item small--one-whole medium-up--one-half" {{ block.shopify_attributes }}>
+        <div class="SS text-center">
+          <div style="position: relative;height:2em;">
+            <span style="font-weight: 700;font-size: 2.5em;text-transform:uppercase;position: absolute;top: 0;left: 50%;transform: translate(-50%);letter-spacing: 2px;z-index: 9999;color: {{block.settings.headline_color}}">{{block.settings.headline}}</span>
+          </div>
+        </div>
+          {% include 'cb_collectionGridItem' %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if section.blocks.size == 0 %}
+    {% include 'no-blocks' %}
+  {% endif %}
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Two Item Block"
+  },
+  "class": "index-section",
+  "max_blocks": 2,
+  "settings": [
+
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": {
+        "en": "Collection"
+      },
+      "settings": [
+        {
+          "type": "text",
+          "id": "headline",
+          "label": {
+            "en": "Headline"
+          },
+          "default": {
+            "en": "Headline"
+          }
+        },
+        {
+          "type": "color",
+          "id": "headline_color",
+          "label": {
+            "en": "Headline color"
+          },
+          "default": "#000"
+         },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image"
+          }
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": {
+            "en": "Button text"
+          },
+          "default": "See More"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": {
+            "en": "Button link"
+          }
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": {
+            "en": "Button text color"
+          },
+          "default": "#fff"
+        }, 
+        {
+          "type": "color",
+          "id": "button_background",
+          "label": {
+            "en": "Button background"
+          },
+          "default": "#ffd600"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Two Item Block"
+   
+      },
+      "category": {
+        "en": "Collection"
+      },
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

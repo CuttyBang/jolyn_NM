@@ -1,0 +1,1442 @@
+$z-index-announcement-bar: 10;
+@function em($pxval, $base: $font-size-base) {
+  @if not unitless($pxval) {
+    $pxval: strip-units($pxval);
+  }
+  @if not unitless($base) {
+    $base: strip-units($base);
+  }
+  @return ($pxval / $base) * 1em;
+}
+
+/*============================================================================
+  Strips the unit from a number.
+  @param {Number (With Unit)} $value
+  @example scss - Usage
+    $dimension: strip-units(10em);
+  @example css - CSS Output
+    $dimension: 10;
+  @return {Number (Unitless)}
+  based on https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/functions/_strip-units.scss
+==============================================================================*/
+@function strip-units($value) {
+  @return ($value / ($value * 0 + 1));
+}
+
+/*============================================================================
+  Return a color based on the brightness of an existing color.
+  Need to pass in brightness because it is calculated with Liquid.
+  @param {Number} $brightness
+  @param {String} $color
+  @example scss - Usage
+    $focusColor: adaptiveColor(#000, 0);
+  @example css - CSS Output
+    $focusColor: #404040;
+  @return {String}
+==============================================================================*/
+
+@function adaptiveColor($color, $brightness) {
+  @if $brightness <= 26 {
+    @return lighten($color, 25%)
+  }
+  @if $brightness <= 64 {
+    @return lighten($color, 15%)
+  } @else {
+    @return darken($color, 10%)
+  }
+}
+
+/*================ #Mixins ================*/
+@mixin clearfix() {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  // sass-lint:disable no-misspelled-properties
+  *zoom: 1;
+}
+
+/*============================================================================
+  Prefix mixin for generating vendor prefixes.
+  Based on https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_prefixer.scss
+
+  Usage:
+    // Input:
+    .element {
+      @include prefix(transform, scale(1), ms webkit spec);
+    }
+
+    // Output:
+    .element {
+      -ms-transform: scale(1);
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+==============================================================================*/
+@mixin prefix($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    @if $prefix == webkit {
+      -webkit-#{$property}: $value;
+    } @else if $prefix == moz {
+      -moz-#{$property}: $value;
+    } @else if $prefix == ms {
+      -ms-#{$property}: $value;
+    } @else if $prefix == o {
+      -o-#{$property}: $value;
+    } @else if $prefix == spec {
+      #{$property}: $value;
+    } @else  {
+      @warn 'Unrecognized prefix: #{$prefix}';
+    }
+  }
+}
+
+@mixin user-select($value: none) {
+  @include prefix('user-select', #{$value}, moz ms webkit spec);
+}
+
+/*================ Media Query Mixin ================*/
+@mixin media-query($media-query) {
+  $breakpoint-found: false;
+
+  @each $breakpoint in $grid-breakpoints {
+    $name: nth($breakpoint, 1);
+    $declaration: nth($breakpoint, 2);
+
+    @if $media-query == $name and $declaration {
+      $breakpoint-found: true;
+
+      @media only screen and #{$declaration} {
+        @content;
+      }
+    }
+  }
+
+  @if $breakpoint-found == false {
+    @warn 'Breakpoint "#{$media-query}" does not exist';
+  }
+}
+
+/*================ Responsive Show/Hide Helper ================*/
+@mixin responsive-display-helper($grid-breakpoint-type: '') {
+  // sass-lint:disable no-important
+  .#{$grid-breakpoint-type}show {
+    display: block !important;
+  }
+
+  .#{$grid-breakpoint-type}hide {
+    display: none !important;
+  }
+}
+
+
+/*================ Responsive Text Alignment Helper ================*/
+@mixin responsive-text-align-helper($grid-breakpoint-type: '') {
+  // sass-lint:disable no-important
+  .#{$grid-breakpoint-type}text-left {
+    text-align: left !important;
+  }
+
+  .#{$grid-breakpoint-type}text-right {
+    text-align: right !important;
+  }
+
+  .#{$grid-breakpoint-type}text-center {
+    text-align: center !important;
+  }
+}
+
+@mixin placeholder-text($color: $color-text-field-text, $opacity: 0.6) {
+  color: $color;
+  opacity: $opacity;
+}
+
+@mixin error-placeholder-text($color: $color-error-input-text, $opacity: 0.5) {
+  color: $color;
+  opacity: $opacity;
+}
+
+@mixin transform($transform) {
+  @include prefix(transform, $transform, ms webkit spec);
+}
+
+@mixin transition($transition) {
+  @include prefix(transition, $transition, ms webkit spec);
+}
+
+@mixin gradient($side, $from, $to) {
+  background: -ms-linear-gradient($side, $from 0%, $to 100%);
+  background: linear-gradient(to $side, $from 0%, $to 100%);
+}
+
+@mixin spinner($size: 20px, $color: $color-btn-primary-text) {
+  content: '';
+  display: block;
+  width: $size;
+  height: $size;
+  position: absolute;
+  margin-left: - $size / 2;
+  margin-top: - $size / 2;
+  border-radius: 50%;
+  border: 3px solid $color;
+  border-top-color: transparent;
+}
+
+@mixin visually-hidden() {
+  // sass-lint:disable no-important
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+@mixin visually-shown() {
+  // sass-lint:disable no-important
+  position: inherit !important;
+  overflow: auto;
+  clip: auto;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
+@mixin overlay($z-index: null) {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $color-image-overlay;
+    opacity: $opacity-image-overlay;
+
+    @if ($z-index) {
+      z-index: $z-index;
+    }
+  }
+}
+
+@mixin default-focus-ring() {
+  outline: 1px dotted #212121;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+/*============================================================================
+  Flexbox prefix mixins from Bourbon
+    https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/css3/_flex-box.scss
+==============================================================================*/
+@mixin display-flexbox() {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%; // necessary for ie10
+}
+
+@mixin flex-wrap($value: nowrap) {
+  @include prefix(flex-wrap, $value, webkit moz ms spec);
+}
+
+@mixin flex-direction($value) {
+  @include prefix(flex-direction, $value, webkit moz ms spec);
+}
+
+@mixin align-items($value: stretch) {
+  $alt-value: $value;
+
+  @if $value == 'flex-start' {
+    $alt-value: start;
+  } @else if $value == 'flex-end' {
+    $alt-value: end;
+  }
+
+  // sass-lint:disable no-misspelled-properties
+  -ms-flex-align: $alt-value;
+  @include prefix(align-items, $value, webkit moz ms o spec);
+}
+
+@mixin flex($value: 0 1 auto) {
+  @include prefix(flex, $value, webkit moz ms spec);
+}
+
+@mixin flex-basis($width: auto) {
+  // sass-lint:disable no-misspelled-properties
+  -ms-flex-preferred-size: $width;
+  @include prefix(flex-basis, $width, webkit moz spec);
+}
+
+@mixin align-self($align: auto) {
+  // sass-lint:disable no-misspelled-properties
+  -ms-flex-item-align: $align;
+  @include prefix(align-self, $align, webkit spec);
+}
+
+@mixin align-content($align: center) {
+  @include prefix(align-content, $align, webkit ms spec);
+}
+
+@mixin justify-content($justify: flex-start) {
+  @include prefix(justify-content, $justify, webkit ms spec);
+}
+
+
+/*================ VARIABLES ================*/
+/*============================================================================
+  Grid Breakpoints and Class Names
+    - Do not change the variable names
+    - $grid-narrowscreen is based on a Shopify breakpoint for checkout buttons
+==============================================================================*/
+$grid-narrowscreen: 500px;
+$grid-medium: 750px;
+$grid-large: 990px;
+$grid-widescreen: 1400px;
+$grid-gutter: 30px;
+$grid-gutter-mobile: 22px;
+
+/*================ Sizing Variables ================*/
+$width-site: 1200px;
+$gutter-site: 55px;
+$gutter-site-mobile: 22px;
+$section-spacing: 35px;
+$section-spacing-small: 35px;
+$border-radius: 2px;
+
+/*================ Footer Variables ================*/
+$footer-spacing-extra-small: 5px;
+$footer-spacing-small: 15px;
+$footer-wrapper-spacing: 18px;
+$footer-hr-bottom-spacing: 20px;
+$footer-spacing-medium: 25px;
+$footer-spacing-large: 45px;
+
+$narrowscreen: 'narrowscreen';
+$small: 'small';
+$medium: 'medium';
+$medium-down: 'medium-down';
+$medium-up: 'medium-up';
+$large: 'large';
+$large-down: 'large-down';
+$large-up: 'large-up';
+$widescreen: 'widescreen';
+
+/*============================================================================
+  Generate breakpoint-specific column widths and push classes
+    - Default column widths: $grid-breakpoint-has-widths: ($small, $medium-up);
+    - Default is no push classes
+==============================================================================*/
+$grid-breakpoint-has-widths: ($small, $medium-up);
+$grid-breakpoint-has-push: ($small, $medium-up);
+
+/*============================================================================
+  #Grid
+==============================================================================*/
+
+// The `$grid-breakpoints` list is used to build our media queries.
+// You can use these in the media-query mixin.
+$grid-breakpoints: (
+  $narrowscreen '(max-width: #{$grid-narrowscreen})',
+  $small '(max-width: #{$grid-medium - 1})',
+  $medium '(min-width: #{$grid-medium}) and (max-width: #{$grid-large - 1})',
+  $medium-down '(max-width: #{$grid-large - 1})',
+  $medium-up '(min-width: #{$grid-medium})',
+  $large '(min-width: #{$grid-large}) and (max-width: #{$grid-widescreen - 1})',
+  $large-down '(max-width: #{$grid-widescreen - 1})',
+  $large-up '(min-width: #{$grid-large})',
+  $widescreen '(min-width: #{$grid-widescreen})'
+);
+
+.SS {
+  .page-width {
+    @include clearfix();
+    max-width: $width-site;
+    margin: 0 auto;
+  }
+
+  .main-content {
+    display: block;
+    padding-top: $section-spacing-small;
+
+    @include media-query($medium-up) {
+      padding-top: $section-spacing;
+    }
+  }
+
+  .section-header {
+    margin-bottom: $section-spacing-small;
+
+    @include media-query($medium-up) {
+      margin-bottom: $section-spacing;
+    }
+
+    a {
+      border-bottom: 1px solid currentColor;
+    }
+  }
+
+  .announcement-bar {
+    text-align: center;
+    position: relative;
+    z-index: $z-index-announcement-bar;
+  }
+
+  .announcement-bar--link {
+    display: block;
+  }
+
+  .announcement-bar__message {
+    display: block;
+    font-size: em(16);
+    font-weight: $font-weight-header;
+    padding: 10px $gutter-site-mobile;
+
+    @include media-query($medium-up) {
+      padding: 10px $gutter-site;
+    }
+  }
+
+  .rich-text__heading--large {
+    font-size: 1.4em; //24px default
+  }
+  .rich-text__heading--small {
+    font-size: 0.88em; //16px default
+  }
+
+  .rich-text__text--large {
+    font-size: em(floor($font-size-base * 1.15));
+  }
+  .rich-text__text--small {
+    font-size: em(floor($font-size-base * 0.88));
+  }
+
+  .product-card {
+    position: relative;
+
+    &:hover,
+    &:focus-within {
+      .product-card__image-wrapper {
+        opacity: 0.8;
+      }
+
+      .product-card__title {
+        border-bottom-color: $color-text;
+      }
+    }
+  }
+
+  .product-card__title {
+    border-bottom: 1px solid transparent;
+    display: inline;
+  }
+/*============================================================================
+Grid
+==============================================================================*/
+  .grid {
+    @include clearfix();
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-left: -$grid-gutter;
+
+    @include media-query($small) {
+      margin-left: -$grid-gutter-mobile;
+    }
+  }
+
+  .grid__item {
+    float: left;
+    padding-left: $grid-gutter;
+    width: 100%;
+
+    @include media-query($small) {
+      padding-left: $grid-gutter-mobile;
+    }
+
+    &[class*="--push"] {
+      position: relative;
+    }
+  }
+
+  /*============================================================================
+    Reversed grids allow you to structure your source in the opposite
+    order to how your rendered layout will appear.
+  ==============================================================================*/
+  .grid--rev {
+    direction: rtl;
+    text-align: left;
+
+    > .grid__item {
+      direction: ltr;
+      text-align: left;
+      float: right;
+    }
+  }
+
+
+  /*================ Buttons ================*/
+  .btn {
+    @include user-select();
+    @include prefix(appearance, none, webkit moz spec);
+    display: inline-block;
+    width: auto;
+    text-decoration: none;
+
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: $border-radius;
+    padding: $input-padding-top-bottom-small $input-padding-left-right-small;
+    background-color: $color-btn-primary;
+    color: $color-btn-primary-text;
+    font-family: $font-stack-header;
+    font-style: $font-style-header;
+    font-weight: $font-weight-header;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: normal;
+    font-size: $font-size-base - 2;
+
+    @include media-query($medium-up) {
+      padding: $input-padding-top-bottom $input-padding-left-right;
+    }
+
+    &:not([disabled]):hover,
+    &:focus {
+      color: $color-btn-primary-text;
+      background-color: $color-btn-primary-focus;
+    }
+
+    .icon-arrow-right,
+    .icon-arrow-left {
+      height: 9px;
+    }
+
+    &[disabled] {
+      cursor: default;
+      opacity: 0.5;
+    }
+  }
+
+  .btn--secondary {
+    background-color: transparent;
+    color: $color-btn-primary;
+    border-color: $color-btn-primary;
+
+    &:not([disabled]):hover,
+    &:focus {
+      background-color: transparent;
+      color: $color-btn-primary-focus;
+      border-color: $color-btn-primary-focus;
+    }
+  }
+
+  .btn--secondary-accent {
+    background-color: $color-body;
+    color: $color-btn-primary;
+    border-color: $color-btn-primary;
+
+    &:not([disabled]):hover,
+    &:focus {
+      background-color:$color-body;
+      color: $color-btn-primary-focus;
+      border-color: $color-btn-primary-focus;
+    }
+  }
+
+  .btn--small {
+    padding: 8px 10px;
+    font-size: em(12);
+    line-height: 1;
+  }
+
+  .btn--tertiary {
+    background-color: transparent;
+    color: $color-small-button-text-border;
+    border-color: $color-small-button-text-border;
+
+    &:not([disabled]):hover,
+    &:focus {
+      background-color: transparent;
+      color: $color-small-button-text-border-focus;
+      border-color: $color-small-button-text-border-focus;
+    }
+  }
+
+  /*================ Button variations ================*/
+  @include media-query($small) {
+    .btn--small-wide {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+  }
+
+  .btn--link {
+    background-color: transparent;
+    border: 0;
+    margin: 0;
+    color: $color-text;
+    text-align: left;
+
+    &:not([disabled]):hover,
+    &:focus {
+      color: $color-text-focus;
+      background-color: transparent;
+    }
+
+    .icon {
+      vertical-align: middle;
+    }
+  }
+
+  .btn--narrow {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .btn--has-icon-after {
+    .icon {
+      margin-left: 10px;
+    }
+  }
+
+  .btn--has-icon-before {
+    .icon {
+      margin-right: 10px;
+    }
+  }
+
+
+  /*================ #Helper Classes ================*/
+  .clearfix {
+    @include clearfix();
+  }
+
+  .visually-hidden {
+    @include visually-hidden();
+  }
+
+  .visibility-hidden {
+    visibility: hidden;
+  }
+
+  .visually-hidden--inline {
+    margin: 0;
+    height: 1em;
+  }
+
+  .visually-hidden--static {
+    position: static !important;
+  }
+
+  .js-focus-hidden:focus {
+    outline: none;
+  }
+
+  // Only show when JS is not supported
+  .no-js:not(html) {
+    display: none;
+
+    .no-js & {
+      display: block;
+    }
+  }
+
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  .list--inline {
+    padding: 0;
+    margin: 0;
+
+    & > li {
+      display: inline-block;
+      margin-bottom: 0;
+      vertical-align: middle;
+    }
+  }
+
+
+  .feature-row {
+    @include display-flexbox();
+    @include justify-content(space-between);
+    @include align-items(center);
+
+    @include media-query($small) {
+      @include flex-direction(column);
+    }
+  }
+
+  .feature-row__item {
+    @include flex(0 1 50%);
+
+    @include media-query($small) {
+      @include flex(1 1 auto);
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .feature-row__image-wrapper {
+    margin: 0 auto $section-spacing-small / 1.8;
+    position: relative;
+    width: 100%;
+  }
+
+  .feature-row__image {
+    display: block;
+    margin: 0 auto;
+
+    .feature-row__image-wrapper & {
+      width: 100%;
+      position: absolute;
+      top: 0;
+    }
+
+    @include media-query($small) {
+      order: 1;
+    }
+  }
+
+  .feature-row__text {
+    padding-top: $section-spacing-small;
+    padding-bottom: $section-spacing-small;
+
+    @include media-query($small) {
+      order: 2;
+      padding-bottom: 0; // always last element on mobile
+    }
+  }
+
+  @include media-query($medium-up) {
+    .feature-row__text--left {
+      padding-left: $section-spacing-small;
+    }
+
+    .feature-row__text--right {
+      padding-right: $section-spacing-small;
+    }
+  }
+
+  .hero {
+    position: relative;
+    height: 475px;
+    display: table;
+    width: 100%;
+    background: {
+      size: cover;
+      repeat: no-repeat;
+      position: 50% 50%;
+    }
+
+  }
+
+  .hero--x-large {
+    height: 582px;
+  }
+
+  @include media-query($medium-up) {
+    .hero--x-small {
+      height: 125px;
+    }
+
+    .hero--small {
+      height: 300px;
+    }
+
+    .hero--medium {
+      height: 475px;
+    }
+
+    .hero--large {
+      height: 650px;
+    }
+
+    .hero--x-large {
+      height: 100vh;
+    }
+  }
+
+  .hero__overlay {
+    @include overlay(1);
+  }
+
+  .hero__inner {
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+    padding: $section-spacing 0;
+    z-index: 2;
+  }
+
+  .hero__btn {
+    margin-top: $section-spacing / 2;
+  }
+
+  /*=============== Lazy loading ===================*/
+
+  .box {
+      background: no-repeat;
+      background-color: #f7f7f7;
+      background-size: contain;
+  }
+  .ratio-container {
+      position: relative;
+  }
+  .ratio-container:after {
+      content:'';
+      display: block;
+      height: 0;
+      width: 100%;
+      /* 16:9 = 56.25% = calc(9 / 16 * 100%) */
+      padding-bottom: 50%;
+      content:"";
+  }
+  .ratio-container > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+  }
+
+
+
+  .list-view-item {
+    margin-bottom: $gutter-site-mobile;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include media-query($medium-up) {
+      border-bottom: 1px solid $color-border;
+      padding-bottom: $gutter-site-mobile;
+
+      &:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+    }
+  }
+
+  // Only show when JS is supported
+  .js {
+    .no-js & {
+      display: none;
+    }
+  }
+
+  .hide {
+    display: none !important;
+  }
+
+  // Mimic a background image by wrapping the placeholder svg with this class
+  .placeholder-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    .icon {
+      border: 0;
+    }
+  }
+
+  /*================ Dropdowns ================*/
+  .site-nav--has-dropdown {
+    position: relative;
+  }
+
+  .site-nav--has-centered-dropdown {
+    position: static;
+  }
+
+  .site-nav__dropdown {
+    display: none;
+    position: absolute;
+    padding: 11px 30px 11px 0;
+    margin: 0;
+    z-index: $z-index-dropdown;
+    text-align: left;
+    border: 1px solid $color-border;
+    background: $color-bg;
+    left: -1px;
+    top: 41px;
+
+    .site-nav__link {
+      padding: 4px 15px 5px;
+    }
+
+    .site-nav--active-dropdown & {
+      display: block;
+    }
+
+    li {
+      display: block;
+    }
+  }
+
+  .site-nav__dropdown--right:not(.site-nav__dropdown--centered) {
+    right: 0;
+    left: unset;
+  }
+
+  .site-nav__dropdown--left:not(.site-nav__dropdown--centered) {
+    left: 0;
+  }
+
+  // Centered dropdown
+  .site-nav__dropdown--centered {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+  }
+
+  /*================ Child list ================*/
+  .site-nav__childlist {
+    display: inline-block;
+    background: $color-bg;
+    padding: 11px 17px;
+    text-align: left;
+  }
+
+  .site-nav__childlist-grid {
+    @include display-flexbox();
+    @include flex-wrap(wrap);
+    width: auto;
+    margin-bottom: -15px;
+  }
+
+  .site-nav__childlist-item {
+    @include flex(0 1 auto);
+    margin-bottom: 15px;
+  }
+
+  .site-nav__child-link--parent {
+    font-weight: $font-weight-body--bold;
+    margin: 4px 0;
+  }
+
+
+  .page-width {
+    padding-left: $gutter-site;
+    padding-right: $gutter-site;
+
+    @include media-query($small) {
+      padding-left: $gutter-site-mobile;
+      padding-right: $gutter-site-mobile;
+    }
+  }
+
+  .page-container {
+    transition: $transition-drawer;
+    position: relative;
+    overflow: hidden;
+
+    @include media-query($medium-up) {
+      // Prevent mobile menu inline styles from overriding desktop styles
+      // sass-lint:disable no-important
+      @include transform(translate3d(0, 0, 0));
+    }
+  }
+
+  /*================ Typography ================*/
+  blockquote {
+    font-size: em(18px);
+    font-style: normal;
+    text-align: center;
+    padding: 0 30px;
+    margin: 0;
+
+    .rte & {
+      border-color: $color-border;
+      border-width: 1px 0;
+      border-style: solid;
+      padding: 30px 0;
+      margin-bottom: $gutter-site / 2;
+    }
+
+    p + cite {
+      margin-top: $gutter-site / 2;
+    }
+
+    cite {
+      display: block;
+      font-size: 0.85em;
+      font-weight: $font-weight-body;
+
+      &::before {
+        content: '\2014 \0020';
+      }
+    }
+  }
+
+  code,
+  pre {
+    font-family: Consolas, monospace;
+    font-size: 1em;
+  }
+
+  pre {
+    overflow: auto;
+  }
+
+  body,
+  input,
+  textarea,
+  button,
+  select {
+    font-size: $font-size-base;
+    font-family: $font-stack-body;
+    font-style: $font-style-body;
+    font-weight: $font-weight-body;
+    color: $color-text;
+    line-height: 1.5;
+  }
+
+  // Prevent zoom on touch devices in active inputs
+  @include media-query($medium-down) {
+    input,
+    textarea,
+    select,
+    button {
+      font-size: $font-size-mobile-input;
+    }
+  }
+
+  /*================ Headings ================*/
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0 0 ($section-spacing-small / 2);
+    font-family: $font-stack-header;
+    font-style: $font-style-header;
+    font-weight: $font-weight-header;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: inherit;
+    }
+  }
+
+  h1 {
+    font-size: em(floor($font-size-header * 1.35));
+    text-transform: none;
+    letter-spacing: 0;
+
+    @include media-query($small) {
+      font-size: em(floor($font-size-header * 1.25));
+    }
+  }
+
+  h2 {
+    font-size: em(floor($font-size-header * 0.78));
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    @include media-query($small) {
+      font-size: em(floor(($font-size-header * 0.78) * 0.9));
+    }
+  }
+
+  h3 {
+    font-size: em($font-size-header);
+    text-transform: none;
+    letter-spacing: 0;
+
+    @include media-query($small) {
+      font-size: em(floor($font-size-header * 0.78));
+    }
+  }
+
+  h4 {
+    font-size: em(floor($font-size-header * 0.68));
+
+    @include media-query($small) {
+      font-size: em(floor(($font-size-header * 0.68) * 0.9));
+    }
+  }
+
+  h5 {
+    font-size: em(floor($font-size-header * 0.58));
+
+    @include media-query($small) {
+      font-size: em(floor(($font-size-header * 0.58) * 0.9));
+    }
+  }
+
+  h6 {
+    font-size: em(floor($font-size-header * 0.54));
+
+    @include media-query($small) {
+      font-size: em(floor(($font-size-header * 0.54) * 0.9));
+    }
+  }
+
+  .h1 {
+    @extend h1;
+  }
+
+  .h2 {
+    @extend h2;
+  }
+
+  .h3 {
+    @extend h3;
+  }
+
+  .h4 {
+    @extend h4;
+  }
+
+  .h5 {
+    @extend h5;
+  }
+
+  .h6 {
+    @extend h6;
+  }
+
+
+  /*================ Hero and slideshow headers ================*/
+  .mega-title,
+  .mega-subtitle {
+    color: $color-overlay-title-text;
+    .hero & {
+      text-shadow: 0 0 4px $color-text-shadow;
+    }
+    @include media-query($medium-up) {
+      text-shadow: 0 0 4px $color-text-shadow;
+    }
+  }
+
+  .mega-title {
+    margin-bottom: 8px;
+  }
+
+  .mega-title--large {
+    font-size: em($font-size-header + 8);
+
+    @include media-query($medium-up) {
+      font-size: em(floor($font-size-header * 2.5));
+    }
+  }
+
+  .collection-grid {
+    margin-bottom: -$gutter-site-mobile;
+    overflow: auto;
+  }
+
+  .collection-grid-item {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    margin-bottom: $gutter-site-mobile;
+
+    @include media-query($medium-up) {
+      margin-bottom: $grid-gutter;
+    }
+  }
+
+  .collection-grid-item__title {
+    color: $color-overlay-title-text;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    top: 50%;
+    padding: 0 5px;
+    @include transform(translateY(-50%));
+    transition: $transition-link-hover;
+    text-shadow: 0 0 4px $color-text-shadow;
+    hyphens: auto;
+
+    @if $font-bold-titles {
+      font-weight: $font-weight-header--bold;
+    }
+
+    @include media-query($medium-up) {
+      padding: 0 15px;
+    }
+  }
+
+  .collection-grid-item__link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    &:hover,
+    &:focus {
+      .collection-grid-item__title-wrapper::before {
+        opacity: $hover-overlay-opacity;
+      }
+    }
+
+    &:focus {
+      opacity: 1;
+    }
+  }
+
+  .collection-grid-item__overlay {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+
+  }
+
+  .collection-grid-item__title-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $color-image-overlay;
+    opacity: $opacity-image-overlay;
+  }
+
+  .grid--view-items {
+    overflow: auto;
+    margin-bottom: -$section-spacing-small;
+  }
+
+  .grid-view-item {
+    margin: 0 auto $section-spacing-small;
+    .custom__item & {
+      margin-bottom: 0;
+    }
+  }
+
+  .grid-view-item__title {
+    margin-bottom: 0;
+    color: $color-text;
+    @if $font-bold-titles {
+      font-weight: $font-weight-header--bold;
+    }
+  }
+
+  .grid-view-item__meta {
+    margin-top: 8px;
+  }
+
+  @include media-query($small) {
+    .grid-view-item__title,
+    .grid-view-item__meta {
+      font-size: em($font-size-base - 1px);
+    }
+  }
+
+
+  .grid-view-item__link {
+    display: block;
+  }
+
+  .grid-view-item__vendor {
+    margin-top: 4px;
+    color: $color-body-text;
+    font-size: em($font-size-base - 2px);
+    text-transform: uppercase;
+    @include media-query($small) {
+      font-size: em($font-size-base - 3px);
+    }
+  }
+
+  .grid-view-item__image-wrapper {
+    margin: 0 auto $grid-gutter / 2;
+    position: relative;
+    width: 100%;
+  }
+
+  .grid-view-item__image {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    .grid-view-item__image-wrapper & {
+      position: absolute;
+      top: 0;
+    }
+    .grid-view-item--sold-out & {
+      opacity: 0.5;
+    }
+    &.lazyload {
+      opacity: 0;
+    }
+  }
+
+  .text-center{
+    text-align: center;
+  }
+
+  // Only show when JS is supported
+  .js {
+    .no-js & {
+      display: none;
+    }
+  }
+
+  .hide {
+    display: none !important;
+  }
+
+  .cb_btn a {
+   @media(max-width: 760px) {
+     font-size: 0.8em !important;
+   }
+  }
+
+
+  .feature-row {
+    @include display-flexbox();
+    @include justify-content(space-between);
+    @include align-items(center);
+
+    @include media-query($small) {
+      @include flex-direction(column);
+    }
+  }
+
+  .feature-row__item {
+    @include flex(0 1 50%);
+
+    @include media-query($small) {
+      @include flex(1 1 auto);
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .feature-row__image-wrapper {
+    margin: 0 auto $section-spacing-small / 1.8;
+    position: relative;
+    width: 100%;
+  }
+
+  .feature-row__image {
+    display: block;
+    margin: 0 auto;
+
+    .feature-row__image-wrapper & {
+      width: 100%;
+      position: absolute;
+      top: 0;
+    }
+
+    @include media-query($small) {
+      order: 1;
+    }
+  }
+
+  .feature-row__text {
+    padding-top: $section-spacing-small;
+    padding-bottom: $section-spacing-small;
+
+    @include media-query($small) {
+      order: 2;
+      padding-bottom: 0; // always last element on mobile
+    }
+  }
+
+  @include media-query($medium-up) {
+    .feature-row__text--left {
+      padding-left: $section-spacing-small;
+    }
+
+    .feature-row__text--right {
+      padding-right: $section-spacing-small;
+    }
+  }
+
+  /*================ RTE headings ================*/
+  .rte {
+    color: $color-body-text;
+    margin-bottom: $section-spacing-small;
+
+    // If an .rte div is the last element in its parent,
+    // make it flush with the bottom of the container
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: $gutter-site;
+      margin-bottom: $gutter-site / 2;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    li {
+      margin-bottom: 4px;
+      list-style: inherit;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // rte setting type to act like a <p> tag
+  .rte-setting {
+    margin-bottom: $section-spacing-small / 1.8; // same as p
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  /*================ Paragraph styles ================*/
+  p {
+    color: $color-body-text;
+    margin: 0 0 ($section-spacing-small / 1.8);
+
+    @include media-query($small) {
+      font-size: em($font-size-base - 1);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  /*================ Lists ================*/
+  li {
+    list-style: none;
+  }
+
+
+
+
+
+
+}

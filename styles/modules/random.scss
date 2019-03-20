@@ -1,0 +1,44 @@
+// store locator loading state
+div[data-stockist-widget-tag="u3714"] {
+    color: transparent;
+    position: relative;
+    
+    a {
+      color: transparent;
+    }
+    
+    &:before {
+      color: #000 !important;
+      content: "Loading...";
+      left: 0;
+      position: absolute;
+      top: 0;
+    }
+  }
+  
+  
+  // product-specific overrides
+  
+  body#e-gift-card {
+    .header.color,
+    .header.color + .p404489281.swatch {
+      display: none;
+    }
+    
+    &.template-product ul.swatch label {
+      padding: 0 5px;
+      width: auto;
+    }
+    
+    div[data-price-wrapper] {
+      display: none;
+    }
+  }
+  
+  // recommendify
+  
+  .recommendify_current_price {
+    color: #c00;
+    font-weight: 600;
+  }
+  

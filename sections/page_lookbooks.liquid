@@ -1,0 +1,43 @@
+<div data-section-id="{{ section.id }}" data-section-type="product" itemscope itemtype="http://schema.org/Product" class="page-lookbooks-index">
+
+  <div class="container">
+    <ul class="post-list">
+      {% for block in section.blocks %}
+        {%- assign collection = collections[block.settings.collection] -%}
+        <li>
+          <a href="{{ collection.url }}">
+            {% if forloop.first == true %}
+              <img src="{{ collection.image | img_url: '1024x1024' }}" />
+            {% else %}
+              <img src="{{ collection.image | img_url: 'medium' }}" />
+            {% endif %}
+            <br>
+            {{ collection.title | remove: "Lookbook: " }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+
+  <!-- https://help.shopify.com/themes/development/theme-editor/settings-schema -->
+
+{% schema %}
+  {
+    "name": "Lookbooks",
+    "blocks": [
+      {
+        "type": "button",
+        "name": "Lookbook",
+        "settings": [
+          {
+            "id": "collection",
+            "type": "collection",
+            "label": "Collection"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

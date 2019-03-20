@@ -1,0 +1,52 @@
+<div data-section-id="{{ section.id }}" class="featured_content_row">
+  <div class="primary_content" style="background: {{section.settings.background}} url('{{section.settings.image_background | img_url: 'master' }}') no-repeat; {% if section.settings.alignment %}background-position: top left;text-align: right;{% else %}background-position: top right;text-align: left;{% endif %}">
+    <a href="{{section.settings.url}}" style="display:block;font-size: 0px;"><img src="{{section.settings.image | img_url: 'master' }}" /></a> 
+  </div>
+</div>
+
+
+
+
+
+{% schema %}
+  {
+    "name": "Feature",
+    "settings": [
+      {
+        "id": "alignment",
+		"type": "checkbox",
+ 		"label": "Right align"
+	  },
+      {
+        "id": "image",
+        "type": "image_picker",
+        "label": "Square image"
+      },
+      {
+        "id": "image_background",
+        "type": "image_picker",
+        "label": "Desktop background image"
+      },
+      {
+        "type": "color",
+        "id": "background",
+        "label": "Background color"
+      },
+      {
+        "id": "url",
+        "type": "text",
+        "label": "Feature URL",
+        "placeholder": "http://"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured Content",
+        "category": "Content"
+
+      }
+    ]
+  }
+{% endschema %}
+
+

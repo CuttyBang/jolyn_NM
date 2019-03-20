@@ -1,0 +1,31 @@
+
+<div class="SS collection-grid-item">
+  <a class="SS collection-grid-item__link">
+    {% unless block.settings.image == blank %}
+      <div class="SS collection-grid-item__overlay box ratio-container lazyload js"
+        data-bgset="{% include 'bgset', block.settings.image %}"
+        data-sizes="auto"
+        data-parent-fit="cover"
+        style="background-image: url('{{ block.settings.image | img_url: '1024x1024' }}')">
+      </div>
+
+      <noscript>
+        <div class="SS collection-grid-item__overlay" style="background-image: url('{{ block.settings.image | img_url: '1024x1024' }}')"></div>
+      </noscript>
+    {% else %}
+      <div class="SS collection-grid-item__overlay">
+        {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
+        {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {% endunless %}
+
+  </a>
+</div>
+     <div class="SS" style="position: relative">
+       <div style="position: absolute; left:50%;transform:translate(-50%);top: -7em;">
+        <a href="{{ block.settings.button_link }}" class="SS btn cb_btn" style="padding: 5px 10px; background-color:{{block.settings.button_background}} !important;color: {{block.settings.button_text_color}} !important;">
+          {{ block.settings.button_text | escape }}
+        </a>
+       </div>
+    </div>
+

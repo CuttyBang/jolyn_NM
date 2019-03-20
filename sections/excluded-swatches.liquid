@@ -1,0 +1,28 @@
+{% schema %}
+  {
+    "name": "Hidden Swatches",
+    "settings": [
+	{
+	  "id": "excluded",
+	  "type": "textarea",
+	  "label": "Excluded Colors",
+	  "info": "Usage: '.color-COLORNAME, .color.COLORNAME'. Multiple color use hyphen in between. No space at the end. Example: .color-sunkist, .color.sunkist, .color-papaya-black, .color.papaya-black"
+	  }
+    ]
+  }
+{% endschema %}
+
+
+{% if section.settings.excluded != blank %}
+<style type="text/css">
+  {{ section.settings.excluded }} {
+    display: none !important;
+  }
+</style>
+{% endif %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

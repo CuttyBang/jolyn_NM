@@ -1,0 +1,187 @@
+<style>
+.flexible {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; }
+
+.flexible-item {
+  padding: 5px;
+  margin-top: 10px; }
+
+.flexible.noWrap {
+  display: flex;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; }
+
+.flexible-column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-wrap: nowrap; }
+
+.flexible-left {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start; }
+
+.flexible-right {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end; }
+
+.flexible-center {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.cb_rteText p {
+  color: {{ section.settings.text_color }} !important;
+}
+</style>
+<div class="page-width rich-text">
+  <div class="cb_topSeparator flexible" style="padding-bottom: 20px;">
+    <div class="flexible-item" style="height: 25px;width: auto;">
+      <img id="{{ img_id }}"
+           class="feature-row__image lazyload"
+           src="{{ section.settings.top_separator_image | img_url: '200x200' }}"
+           data-src="{{ img_url }}"
+           data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+           data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+           data-sizes="auto"
+           alt="separator image"
+           style="display: block; margin: auto;height: 100%;width: auto">
+    </div>
+  </div>
+  <div class="grid">
+    <div class="grid__item {% unless section.settings.full_width %} medium-up--two-thirds medium-up--push-one-sixth{% endunless %}">
+      {% if section.settings.section_title != blank %}
+        <div class="rich-text__heading--{{ section.settings.text_size }} text-center">
+          <h2 class="h2">{{ section.settings.section_title | escape }}</h2>
+        </div>
+      {% endif %}
+      {% if section.settings.text != blank %}
+        <div class="cb_rteText rich-text__text--{{ section.settings.text_size }} rte-setting text-center" style="font-size:1.2em;">{{ section.settings.text }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="cb_bottomSeparator flexible" style="padding-top: 20px;">
+    <div class="flexible-item" style="height: 25px;width: auto;">
+      <img id="{{ img_id }}"
+           class="feature-row__image lazyload"
+           src="{{ section.settings.bottom_separator_image | img_url: '200x200' }}"
+           data-src="{{ img_url }}"
+           data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+           data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+           data-sizes="auto"
+           alt="separator image"
+           style="display: block; margin: auto;height: 100%;width: auto">
+    </div>
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Text Bar"
+  },
+ "class": "index-section",
+ "settings": [
+   {
+     "type": "checkbox",
+     "id": "full_width",
+     "label": {
+       "en": "Wide display"
+     }
+   },
+   {
+     "type": "image_picker",
+     "id": "top_separator_image",
+     "label": {
+       "en": "Top separator"
+     }
+   },
+   {
+     "type": "text",
+     "id": "section_title",
+     "label": {
+       "en": "Heading"
+     },
+     "default": {
+       "en": "Talk about your brand"
+     }
+   },
+   {
+     "type": "richtext",
+     "id": "text",
+     "label": {
+       "en": "Text"
+     },
+     "default": {
+       "en": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+     }
+   },
+   {
+     "type": "color",
+     "id": "text_color",
+     "label": {
+       "en": "Text color"
+     },
+     "default": "#000"
+    },
+   {
+     "type": "select",
+     "id": "text_size",
+     "label": {
+       "en": "Size"
+     },
+     "default": "medium",
+     "options": [
+       {
+         "label": {
+           "en": "Small"
+         },
+         "value": "small"
+       },
+       {
+         "label": {
+           "en": "Medium"
+         },
+         "value": "medium"
+       },
+       {
+         "label": {
+           "en": "Large"
+         },
+         "value": "large"
+       }
+     ]
+   },
+   {
+     "type": "image_picker",
+     "id": "bottom_separator_image",
+     "label": {
+       "en": "Bottom separator"
+     }
+   }
+ ],
+ "presets": [
+   {
+     "name": {
+       "en": "Text Bar"
+     },
+     "category": {
+       "en": "Text"
+     }
+   }
+ ]
+}
+{% endschema %}

@@ -1,0 +1,76 @@
+<div data-section-id="{{ section.id }}" data-section-type="product" itemscope itemtype="http://schema.org/Product">
+
+<style type="text/css">
+  /*global properties for 1 color*/
+  {% comment %}
+  {% for block in section.blocks %}
+  	li[class^="color-"] a,
+  	li[class^="color."] label{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+  {% endcomment %}
+  
+
+  	li[class^="color-"] a,
+  	li[class^="color."] label
+
+  {
+      overflow: hidden;
+      position: relative;
+    }
+
+
+  /*1 color*/
+
+  {% for block in section.blocks %}.color-{{ block.settings.swatch-1 | downcase | replace: ' ', '-' }} a, .color.{{ block.settings.swatch-1 | downcase | replace: ' ', '-' }} label {background: {{ block.settings.color-1 }};}
+  {% endfor %}
+
+</style>
+</div>
+
+{% schema %}
+  {
+    "name": "Swatches",
+    "blocks": [
+      {
+        "type": "button",
+        "name": "Swatch",
+        "settings": [
+          {
+            "type": "text",
+            "id": "swatch-1",
+            "label": "Color 1 Name",
+            "placeholder": "Color 1 Name"
+          },
+          {
+            "type": "color",
+            "id": "color-1",
+            "label": "Swatch 1",
+            "info": "Only using 1 color? Ignore below."
+          },
+          {
+            "type": "text",
+            "id": "swatch-2",
+            "label": "Color 2 Name",
+            "placeholder": "Color 2 Name"
+          },
+          {
+            "type": "color",
+            "id": "color-2",
+            "label": "Swatch 2"
+          },
+          {
+            "type": "text",
+            "id": "swatch-3",
+            "label": "Color 3 Name",
+            "placeholder": "Color 3 Name"
+          },
+          {
+            "type": "color",
+            "id": "color-3",
+            "label": "Swatch 3"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

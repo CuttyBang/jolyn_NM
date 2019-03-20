@@ -1,0 +1,22 @@
+      <script>
+        !function(n,o){function t(o){var t=n.getElementsByTagName("script")[0],i=n.createElement("script");i.src=o,i.crossOrigin="",t.parentNode.insertBefore(i,t)}if(!o.isLoyaltyLion){window.loyaltylion=o,void 0===window.lion&&(window.lion=o),o.version=2,o.isLoyaltyLion=!0;var i=new Date;t("https://sdk.loyaltylion.net/static/2/loader.js?t="+i.getFullYear()+i.getMonth()+i.getDate());var e=!1;o.init=function(n){if(e)throw new Error("Cannot call lion.init more than once");e=!0;var i=o._token=n.token;if(!i)throw new Error("Token must be supplied to lion.init");for(var r=[],a="_push configure bootstrap shutdown on removeListener".split(" "),l=0;l<a.length;l+=1)!function(n,o){n[o]=function(){r.push([o,Array.prototype.slice.call(arguments,0)])}}(o,a[l]);t("https://sdk.loyaltylion.net/sdk/start/"+i+".js"),o._initData=n,o._buffer=r}}}(document,window.loyaltylion||[]);
+        {% if customer != nil %}
+  {% assign now = 'now' | date: "%Y-%m-%dT%H:%M:%S%z" %}
+  loyaltylion.init({
+    token: 'b2ab0a65aebd352aabba0d700b6b95e7',
+    customer: {
+      id: "{{ customer.id }}",
+      email: "{{ customer.email }}",
+      name: "{{ customer.name }}",
+      recharge_hash: "{{ customer.metafields.subscriptions.customer_string | if: customer.metafields.subscriptions.customer_string }}"
+    },
+    auth: {
+      date: "{{ now }}",
+      token: "{{ customer.id | append: now | append: customer.email | append: 'caed5730958db6be4560d944a3894f7e' | sha1 }}"
+    },
+  })
+{% else %}
+  loyaltylion.init({ token: 'b2ab0a65aebd352aabba0d700b6b95e7' });
+{% endif %}
+
+      </script>

@@ -1,0 +1,189 @@
+
+{% assign _section = section.settings %}
+
+{% assign blog = blogs[_section.ojp_blog] %}
+
+<section id="jolyn_about"> 
+    <div class="about_hero" style="background-image: url({{ _section.hero_img | img_url: '1500x' }});">
+        <h1>{{ _section.hero_text }}</h1>
+    </div>
+    <div class="about_main_content">
+        <div class="about__snippets">
+            {% for block in section.blocks %}
+                {% assign _block = block.settings %}
+                <div class="about__snippet">
+                    <div class="about__snippet_desc">
+                        <div class="about__snippet_desc_inner">
+                            <h4>{{ _block.small_title }}</h4>
+                            <h2 class="title">{{ _block.large_title }}</h2>
+                            <p>{{ _block.block_paragraph }}</p>
+                            {% if _block.learn_more == true %}
+                                <a href="#" class="learn_more">Learn More</a>
+                            {% endif %}
+                            <div class="about__snippet_thumb_mobile">
+                                <div class="about__snippet_thumb_mobile_cont">
+                                    <img src="{{ _block.block_image | img_url: '500x500' }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about__snippet_thumb">
+                        <div class="about__snippet_thumb_cont">
+                            <img src="{{ _block.block_image | img_url: '500x500' }}" />
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="jo_pros_blogs">
+            <h2 class="title">{{ _section.blog_title }}</h2>
+            <p>{{ _section.blog_desc }}</p>
+            <a href="#" class="view_all">View All</a>
+            <div class="jo_pros_carousel owl-carousel owl-theme">
+
+                {% for article in blog.articles %}
+
+                    <div class="item pro">
+                        <div class="pro_thumb">
+                            <a href="{{ article.url }}" ><img src="{{ article.image.src | img_url: '500x' }}"></a>
+                        </div>
+                        <div class="pro_desc">
+                            <span class="pro_name">{{ article.title }}</span>
+                            <span class="pro_title">{{ article.content }}</span>
+                            <a href="http://instagram.com/_u/{{ article.metafields.instagram.handle }}/" class="pro_social">@{{ article.metafields.instagram.handle }}</a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+
+{% for block in section.blocks %}
+    {% assign _block = block.settings %}
+    <style>
+        #jolyn_about .about_main_content .about__snippet:nth-child({{ forloop.index}}) .about__snippet_thumb_cont:after,
+        #jolyn_about .about_main_content .about__snippet:nth-child({{ forloop.index}}) .about__snippet_desc .about__snippet_desc_inner .about__snippet_thumb_mobile_cont:after {
+            background-color: {{ _block.bg_image_color }};
+        }                
+    </style>
+{% endfor %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+<script>
+    $('.jo_pros_carousel').owlCarousel({
+        items: 4,
+        loop: true,
+        margin: 10,
+        nav: true,
+        responsive:{
+            0: {
+                items:2
+            },
+            767:{
+                items:2
+            },
+            992:{
+                items:3
+            },
+            1170:{
+                items: 4
+            }
+        }
+    })
+    $('.owl-nav').removeClass('disabled');
+    $('.owl-nav').click(function(event) {
+        $(this).removeClass('disabled');
+    });
+</script>
+
+
+{% schema %}
+  {
+    "name": "About", 
+    "settings": [ 
+        {
+            "type": "image_picker",
+            "id": "hero_img",
+            "label": "Hero Image"
+        },
+        {
+            "type": "text",
+            "id": "hero_text",
+            "label": "Hero Text",
+            "default": "For Women Who Inspire Us"
+        },
+        {
+            "type": "blog",
+            "id": "ojp_blog",
+            "label": "Which Blog to add to carousel?", 
+            "info": "Our Jo Pros Blog"
+        },
+        {
+            "type": "text",
+            "id": "blog_title",
+            "label": "Carousel Blog Title",
+            "default": "Our Jo Pros"
+        },
+        {
+            "type": "text",
+            "id": "blog_desc",
+            "label": "Carousel Blog Description",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at imperdiet augue. Aliquam finibus elementum imperdiet. Morbi vel augue eget lectus vehicula tristique."
+        }
+    ],
+    "blocks": [
+		{
+			"type": "about-block-1",
+			"name": "About Content Block",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "block_image",
+					"label": "Thumbnail",
+					"info": "recommended size is 570 x 476px"
+				},
+                {
+					"type": "text",
+					"id": "small_title",
+					"label": "Small Title",
+					"default": "Our Mission"                    
+                },
+				{
+					"type": "text",
+					"id": "large_title",
+					"label": "Large Title",
+					"default": "We give it our all - great quality, style, and fit"
+				},
+				{
+					"type": "textarea",
+					"id": "block_paragraph", 
+					"label": "Text"
+				},
+                {
+                    "type": "select",
+                    "id": "bg_image_color",
+                    "label": "Square Background Color",
+                    "options": [
+                        { "value": "#FE3B49", "label": "Red" },
+                        { "value": "#8FD2CB", "label": "Light Blue" },
+                        { "value": "#EFD214", "label": "Yellow" }
+                    ]
+                },
+                {
+                    "type": "checkbox",
+                    "id": "learn_more",
+                    "label": "Add 'Learn More' link?",
+                    "default": false
+                }
+			]
+		}
+    ]
+
+  }
+{% endschema %}

@@ -1,0 +1,23 @@
+# This file contains the information needed for Shopify to authenticate
+# requests and edit/update your remote theme files.
+#
+# Remove the 'sample' part of the filename so it is just config.yml and enter in your specific development theme id from shopify admin.
+#
+#
+# 1. Set up a private app (https://help.shopify.com/api/guides/api-credentials#generate-private-app-credentials)
+#    with "Read and write" permissions for "Theme templates and theme assets".
+# 2. Replace the required variables for each environment below.
+#
+# password, theme_id, and store variables are required.
+#
+# For more information on this config file:
+#   Configuration variables | http://shopify.github.io/themekit/configuration/
+#   Ignore patterns | http://shopify.github.io/themekit/ignores/
+
+---
+development:
+  password: 23f9315a736356af12ff6bcc28333e40
+  theme_id: "15090057263"
+  store: jolyn-clothing-development.myshopify.com
+  ignore_files:
+    - config/settings_data.json

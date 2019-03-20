@@ -1,0 +1,266 @@
+<style>
+.flexible {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; }
+
+.flexible-item {
+  padding: 5px;
+  margin-top: 10px; }
+
+.flexible.noWrap {
+  display: flex;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; }
+
+.flexible-column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-wrap: nowrap; }
+
+.flexible-left {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start; }
+
+.flexible-right {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end; }
+
+.flexible-center {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+</style>
+
+<div class="SS">
+  <div class="cb_heroWrapper" style="height: 100vh;">
+    <div class="hero hero--x-large{% if section.settings.overlay %} hero__overlay{% endif %} box ratio-container lazyload js"
+         {% if section.settings.image %}
+         data-bgset="{% include 'bgset', image: section.settings.image %}"
+         data-sizes="auto"
+         data-parent-fit="cover"
+         style="background-position: {{ section.settings.alignment }}; background-image: url('{{ section.settings.image | img_url: '300x300' }}');" {% endif %}>
+      {% if section.settings.image == blank %}
+        <div class="placeholder-background">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% endif %}
+      <div class="hero__inner">
+        <div class="page-width cb_heroContent">
+          {% if section.settings.title != blank %}
+            <h2 class="h1 mega-title mega-title--large" style="color:{{ section.settings.title_color }};text-align: {{section.settings.text_align}};">{{ section.settings.title | escape }}</h2>
+          {% endif %}
+          {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+            <a href="{{ section.settings.button_link }}" class="btn hero__btn" style="float: {{section.settings.text_align}};color:{{ section.settings.button_background}};background: transparent;font-size: 1.5em;margin-top:0;">
+              {{ section.settings.button_label | escape }}&rarr;
+            </a>
+          {% endif %}
+          {% if section.settings.subtitle != blank %}
+            <div style="position: relative; top: 0; left: 0;">
+              <div class="cb_subtitleTextWrapper"  style="-webkit-transform:skewX(-12deg);transform: kewX(-12deg);position: absolute; top: 40vh; left: 25px;font-weight: 600;color:{{ section.settings.subtitle_color }} !important;background-color: {{ section.settings.subtitle_background }} !important;padding: 0.5em 1em;">
+                {{ section.settings.subtitle }}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="cb_scrollIndicatorWrapper" style="position: relative;top: 0; left:0; width: 100%; z-index: 99999;">
+      <div class="cb_scrollIndicator flexible" style="position: absolute;top: -10vh;width: 100%;">
+        <div class="flexible-center" style="margin: 0 auto;">
+          <span style="color:{{section.settings.scroll_indicator_color}};text-transform: uppercase;">{{ section.settings.scroll_indicator_text }}</span>
+          <div style="position: relative;padding-top: 5px;" class="flexible">
+            {% include "cb_scrollIndicator" %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<noscript>
+  <div class="SS hero hero--{{ section.settings.hero_size }}{% if section.settings.overlay %} hero__overlay{% endif %}"{% if section.settings.image %} style="background-image: url('{{ section.settings.image | img_url: '2048x' }}'); background-position: center {{ section.settings.alignment }};"{% endif %}></div>
+</noscript>
+
+</div>
+
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Hero"
+  },
+  "class": "index-section index-section--flush",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": {
+        "en": "Image"
+      }
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": {
+        "en": "Image alignment"
+      },
+      "default": "center",
+      "options": [
+        {
+          "value": "top",
+          "label": {
+            "en": "Top"
+          }
+        },
+        {
+          "value": "center",
+          "label": {
+            "en": "Middle"
+          }
+        },
+        {
+          "value": "bottom",
+          "label": {
+            "en": "Bottom"
+          }
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay",
+      "label": {
+        "en": "Overlay"
+      },
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "en": "Headline"
+      },
+      "default": {
+        "en": "Image with text overlay"
+      }
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": {
+        "en": "Headline color"
+      },
+      "default": "#fff"
+     },
+     {
+       "type": "text",
+       "id": "button_label",
+       "label": {
+         "en": "Button text"
+       }
+     },
+     {
+       "type": "color",
+       "id": "button_background",
+       "label": {
+         "en": "Subtitle text color"
+       },
+       "default": "#fff"
+     },
+     {
+       "type": "url",
+       "id": "button_link",
+       "label": {
+         "en": "Button link"
+       }
+     },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": {
+        "en": "Text alignment"
+      },
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": {
+            "en": "Left"
+          }
+        },
+        {
+          "value": "right",
+          "label": {
+            "en": "Right"
+          }
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": {
+        "en": "Subtitle"
+      },
+      "default": {
+        "en": "Subtitle text"
+      }
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": {
+        "en": "Subtitle color"
+      },
+      "default": "#fff"
+     },
+    {
+      "type": "color",
+      "id": "subtitle_background",
+      "label": {
+        "en": "Subtitle background"
+      },
+      "default": "#000"
+    },
+    {
+      "type": "text",
+      "id": "scroll_indicator_text",
+      "label": {
+        "en": "Scroll indicator test"
+      },
+      "default": "EXPLORE"
+    },
+    {
+      "type": "color",
+      "id": "scroll_indicator_color",
+      "label": {
+        "en": "Button background"
+      },
+      "default": "#fff"
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Hero"
+      },
+      "category": {
+        "en": "Image"
+      }
+    }
+  ]
+}
+{% endschema %}

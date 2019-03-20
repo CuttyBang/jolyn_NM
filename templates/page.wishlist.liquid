@@ -1,0 +1,29 @@
+<div class="water-bar">
+  <div class="container">
+    <h2>
+      {% if customer.first_name != blank %}
+      {{ customer.first_name }}'s {{ page.title }}      
+      {% else %}
+      {{ page.title }}
+      {% endif %}</h2>    
+  </div>
+</div>
+
+<div class="container">
+  <div class="j-form account-page">
+<!--     <h1>{{ 'customer.account.title' | t }}</h1> -->
+
+    <div class="flex reversed">
+      {% if customer %}
+      <aside>
+		{% include 'nav-account' %}
+      </aside>
+      {% endif %}
+      
+      <div>
+
+        <!-- include 'wishlist-collection' -->
+	    
+      </div>	
+  </div>
+</div>

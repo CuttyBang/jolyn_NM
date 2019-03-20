@@ -1,0 +1,175 @@
+<script>
+  var ambassadorHeader = function () {
+    $(".columns h1").css({'padding-top':($(".columns > div > p > img").height()+'px')});
+    $(".columns aside").css({'padding-top':($(".columns > div > p > img").height()+'px')});
+  };
+  
+  $(document).ready(function() {
+    ambassadorHeader();
+  });
+  
+  $(window).resize(function() {
+    ambassadorHeader();
+  });
+</script>
+
+
+<div class="container">
+  <header>
+    <h1>{{ page.title | remove: "Ambassador: " | remove: "Jopro: " }}</h1>
+  </header>
+
+  <div class="rte">
+    <div class="columns">
+      <div>
+	    {{ page.content }}
+      </div>
+      <aside>
+        
+        <div class="facts">
+          <h3>Fast Facts</h3>
+          <ul>
+            {{ page.metafields.ambassador.facts }}
+          </ul>
+        </div>
+        
+        <div class="quote-frame">
+    
+          {% comment %}<h3>Favorite Quote</h3>{% endcomment %}
+          <blockquote>{{ page.metafields.ambassador.quote }}</blockquote>
+          
+          <span>- {{ page.metafields.ambassador.quote-byline }}</span>
+          
+        </div>
+        
+      </aside>
+    </div>
+    
+    
+      {{ page.metafields.ambassador.gallery }}
+    
+  </div>
+
+    <!----added for JC-collection-in-page-->
+  {%comment%}Collection variable, Keep the collection handle as same as page handle{%endcomment%}
+  {%assign collection = collections[page.handle]%}
+
+<section class="products">
+  <h3>Favorite Jolyns</h3>
+  <p>{{ page.metafields.ambassador.favorites }}</p>
+  <ul>
+  {%- comment %}<locksmith:d990>{% endcomment -%}
+    {%- assign locksmith_0d03_forloop__size = 0 %}{% for product in collection.products %}{% include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: product %}{% if locksmith_transparent %}{% assign locksmith_0d03_forloop__size = locksmith_0d03_forloop__size | plus: 1 %}{% endif %}{% endfor %}{% assign locksmith_0d03_forloop__index = nil -%}
+  {%- comment %}</locksmith:d990>{% endcomment -%}
+  {% for product in collection.products %}
+  {%- comment %}<locksmith:d995>{% endcomment -%}
+    {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: product, locksmith_subject_parent: collection %}{% if locksmith_transparent %}{% if locksmith_0d03_forloop__index == nil %}{% assign locksmith_0d03_forloop__index = 1 %}{% assign locksmith_0d03_forloop__index0 = 0 %}{% else %}{% assign locksmith_0d03_forloop__index = locksmith_0d03_forloop__index | plus: 1 %}{% assign locksmith_0d03_forloop__index0 = locksmith_0d03_forloop__index0 | plus: 1 %}{% endif %}{% if locksmith_0d03_forloop__index == 1 %}{% assign locksmith_0d03_forloop__first = true %}{% else %}{% assign locksmith_0d03_forloop__first = false %}{% endif %}{% if locksmith_0d03_forloop__index == locksmith_0d03_forloop__size %}{% assign locksmith_0d03_forloop__last = true %}{% else %}{% assign locksmith_0d03_forloop__last = false %}{% endif %}{% assign locksmith_0d03_forloop__rindex = locksmith_0d03_forloop__size | minus: locksmith_0d03_forloop__index | minus: 1 %}{% assign locksmith_0d03_forloop__rindex0 = locksmith_0d03_forloop__size | minus: locksmith_0d03_forloop__index0 | minus: 1 %}{% else %}{% continue %}{% endif -%}
+  {%- comment %}</locksmith:d995>{% endcomment -%}
+  {%comment%}products loop goes here{%endcomment%}
+  <!--<h4>{{product.title}} </h4>-->
+    
+          {% unless product.images.size == 0 %}
+        
+          <!--added for tag based hide product-->
+            {% for option in product.options %}
+              {%if option contains 'size' or option contains 'Size'%}
+                {%assign size_order = forloop.index %}
+              {%endif%}  
+          {% endfor %}
+          {% assign title_tags = current_tags | join: ', ' %}
+          {% for all_tags in current_tags %} 
+            {%if all_tags contains 'size' %}
+              {% assign size_filter = all_tags | split: '-'  %}
+              {% assign size_filter = size_filter[1] %}
+            {%endif%}  
+          {% endfor %}
+          {%if title_tags contains 'size' %}
+              {% assign available_flag = false  %}
+          {% else %}
+              {% assign available_flag = true  %}
+          {%endif%}
+          {% for variant in product.variants %}
+           {%assign size_filter_C = size_filter | capitalize  %}
+           {%assign order_of_size = 'option' | append: size_order  %}
+              {%if variant[order_of_size] contains size_filter or variant[order_of_size] contains size_filter_C %}
+                  {%if variant.available %}
+                {% assign available_flag = true  %}
+                  {%endif%}
+              {%endif%}
+          {% endfor %}
+            <!--added for tag based hide product-->
+
+
+            <li class="{%unless available_flag %} hide  {%endunless%}">
+              <a href="{{ product.url | within: collection }}">
+                <img src="{{ product.featured_image.src | img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}"{% if product.images.size > 1 %} class="featured"{% endif %}>
+                {% if product.images.size > 1 %}
+                <img src="{{ product.images[1] | img_url: 'grande' }}" alt="{{ product.images[1].alt | escape }}" class="secondary">
+                {% endif %}
+              </a>
+
+              <div class="details">
+                <h3><a href="{{ product.url | within: collection }}">{{ product.title | replace: '/', '/<wbr>' }}</a></h3>
+
+                <div class="price">
+                  
+
+                  {% if product.compare_at_price > product.price %}
+
+                    {% if product.price_varies %}
+                      {%- assign sale_price = product.price | money -%}
+                      {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+                    {% else %}
+                        <!--{{ 'products.product.on_sale' | t }}-->
+                      <span data-product-price{% if product.compare_at_price_max > product.price %} class="on-sale"{% endif %}>
+                        {{ product.price | money | remove: '.00' }}
+                      </span>
+                  
+                      <s data-compare-price>
+                        {% if current_variant.compare_at_price > current_variant.price %}
+                          {{ current_variant.compare_at_price | money | remove: '.00' }}
+                        {% endif %}
+                      </s>
+                  
+                    {% endif %}
+
+                  {% else %}
+
+                    {% if product.price_varies %}
+                      {%- assign price = product.price | money -%}
+                      {{ 'products.product.from_text_html' | t: price: price }}
+                    {% else %}
+                      {{ product.price | money | remove: '.00' }}
+                    {% endif %}
+
+                  {% endif %}
+
+                  {% unless product.available %}
+                    {{ 'products.product.sold_out' | t }}
+                  {% endunless %}
+
+                  {% if product.compare_at_price > product.price %}
+                    <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                    <s>{{ product.compare_at_price | money | remove: '.00' }}</s>
+                  {% endif %}
+                </div>
+              </div>
+
+              <span class="stamped-product-reviews-badge small-stars" data-id="{{ product.id }}" data-product-type="{{product.type}}" style="display: block; padding: .25em .5em"></span>
+
+              <div class="colors">
+                {% include 'swatch' with 'Color' %}
+              </div>
+
+              <style>
+              .small-stars .fa-star-half-o:before, .small-stars .fa-star-o:before, .small-stars .fa-star:before {
+              font-size: 17px !important;
+              margin-right: 2px !important;
+              }
+              </style>
+            </li>
+          {% endunless %}  
+  {%endfor%}
+  </ul>
+    </section>
+  <!----added for JC-collection-in-page-->    

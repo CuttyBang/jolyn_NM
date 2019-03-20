@@ -1,0 +1,116 @@
+<div class="container">
+  <header>
+    <h1>{{ page.title }}</h1>
+  </header>
+
+  <div class="rte">
+    {{ page.content }}
+  </div>
+  
+  <ul class="ambassadors-list">
+    {%- comment %}<locksmith:6329>{% endcomment -%}
+      {%- assign locksmith_f550_forloop__size = 0 %}{% for link in linklists.ambassadors.links %}{% include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: link %}{% if locksmith_transparent %}{% assign locksmith_f550_forloop__size = locksmith_f550_forloop__size | plus: 1 %}{% endif %}{% endfor %}{% assign locksmith_f550_forloop__index = nil -%}
+    {%- comment %}</locksmith:6329>{% endcomment -%}
+    {% for link in linklists.ambassadors.links %}
+    {%- comment %}<locksmith:1de2>{% endcomment -%}
+      {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: link, locksmith_subject_parent: linklists.ambassadors %}{% if locksmith_transparent %}{% if locksmith_f550_forloop__index == nil %}{% assign locksmith_f550_forloop__index = 1 %}{% assign locksmith_f550_forloop__index0 = 0 %}{% else %}{% assign locksmith_f550_forloop__index = locksmith_f550_forloop__index | plus: 1 %}{% assign locksmith_f550_forloop__index0 = locksmith_f550_forloop__index0 | plus: 1 %}{% endif %}{% if locksmith_f550_forloop__index == 1 %}{% assign locksmith_f550_forloop__first = true %}{% else %}{% assign locksmith_f550_forloop__first = false %}{% endif %}{% if locksmith_f550_forloop__index == locksmith_f550_forloop__size %}{% assign locksmith_f550_forloop__last = true %}{% else %}{% assign locksmith_f550_forloop__last = false %}{% endif %}{% assign locksmith_f550_forloop__rindex = locksmith_f550_forloop__size | minus: locksmith_f550_forloop__index | minus: 1 %}{% assign locksmith_f550_forloop__rindex0 = locksmith_f550_forloop__size | minus: locksmith_f550_forloop__index0 | minus: 1 %}{% else %}{% continue %}{% endif -%}
+    {%- comment %}</locksmith:1de2>{% endcomment -%}
+    {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: link, locksmith_subject_parent: linklists.swim-tops-category %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif -%}
+    {% assign collection = link.object %}
+    {% unless collection.handle == 'frontpage' %}
+	<li>
+      {% comment %}
+        <a href="{{link.url}}">
+            {{link.title}}
+          <!--{{link.object.content}}-->
+        </a>
+      
+      	{% assign photos = link.object.content | split: 'alt="">' %}
+
+        {% for photo in photos %}
+          {{ photo }}
+        {% endfor %}
+      
+      {% endcomment %}
+  
+      {% assign html_string = link.object.content %}
+      
+      {% assign pieces = html_string | split: 'src="' %}
+      {% assign extracted_urls = '' %}
+
+      {% for piece in pieces %}
+          {% unless forloop.first %}
+              {% assign extracted_url = piece | replace_first: '">', ' ' | truncatewords: 1 | remove_first: '...' %}
+              {% assign extracted_urls = extracted_urls | append: extracted_url %}
+          {% endunless %}
+      {% endfor %}
+
+      {% assign extracted_urls = extracted_urls | remove_first: ', ' | split: '" /> ' %} <!-- this will clean up the first comma and convert to an array -->
+
+      {% for extracted_url in extracted_urls %}
+        <a href="{{link.url}}" style="background-image: url({{ extracted_url | remove: '"'}})">
+          <h1>{{link.title}}</h1>
+        </a>
+      {% endfor %}
+      
+    </li>
+    {% endunless %}
+    {% endfor %}
+  </ul>
+
+{% comment %}  
+  —— 
+   {% for link in linklists.lauren-fendrick-1.links %}
+  {%- comment %}<locksmith:dcc0>{% endcomment -%}
+    {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: link, locksmith_subject_parent: linklists.lauren-fendrick-1 %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif -%}
+  {%- comment %}</locksmith:dcc0>{% endcomment -%}
+  {{ pages[link.object.handle].metafields.ambassador.facts }} //add metfield 
+  {% endfor %}
+<hr>
+  <hr>
+  {{pages.metafields.ambassador.facts}}
+  <hr>
+  {% for field in product.metafields.facts %}
+              <li><h6>{{ field | last }}</h6></li>
+       {% endfor %}
+  <hr><hr>
+
+  ---0---
+  
+  {% if page.title == "Ambassadors" %}
+  
+  	(C) <span>{{ page.metafields.ambassadors }}</span>
+  
+  {% endif %}
+  (D)
+  {{ page.metafields.ambassadors }}
+  
+  ==
+    {{ page.metafields.ambassadors.list }}
+  
+  ---1---
+  A.
+   {% for field in page.metafields.ambassador %}
+   <li>{{ field | first }}: {{ field | last }}</li>
+   
+{% endfor %}
+  B.
+  {% for ambassador in page.metafields.ambassador %}
+  
+    {{ ambassador.quote }}
+  
+  {% endfor %}
+  
+  1. {{page.metafields.ambassador.5954437169 }}
+  <br>2. {{page.metafields.ambassador.all }}
+  
+{% assign instructions = page.metafields.instructions %}
+{% assign key = 'wash' %}
+<ul>
+  <li>Wash: {{ instructions[key] }}</li>
+  <li>Wash: {{ instructions['wash'] }}</li>
+  <li>Wash: {{ instructions.wash }}</li>
+</ul>
+{% endcomment %}
+
+</div>

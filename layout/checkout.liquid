@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+    
+    <style type="text/css">
+      
+    </style>
+  </head>
+  
+  <body>
+    {{ skip_to_content_link }}
+    <div class="banner" data-header>
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </div>
+
+    {{ order_summary_toggle }}
+
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main" role="main">
+          <div class="main__header">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+          </div>
+          <div class="main__content">
+            {{ content_for_layout }}
+          </div>
+          <div class="main__footer">
+            {{ content_for_footer }}
+          </div>
+        </div>
+        <div class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+          </div>
+          
+	        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+			<script src="https://s3.amazonaws.com/idme/developer/idme-buttons-2.0.1/assets/js/idme-modal.min.js" type="text/javascript"></script> <script type="text/javascript">   $(".order-summary__section--discount").after(`<div class='idme-btn-container'>   <span class='idme-btn-affinity'>Military members receive 10% off with ID.me</span>    <a href='https://shopify.id.me/oauth/checkpoint?client_id=879d7fee98eb79ea44d0e86ca48ce2d7&scope=military'>     <img src='https://s3.amazonaws.com/idme/buttons/v3/narrow/troop.png' border='0' alt='Verify with ID.me troop ID' class='idme-btn-primary-lg-troop' style='height:34px'>   </a>      <span class='idme-btn-verification'>     <img alt='Lock' src='https://s3.amazonaws.com/idme/assets/lock.png' class='idme-btn-lock' width='8'>     Verification by ID.me &bull;     <a href='#' class='idme-modal-open'>       What is ID.me?     </a>   </span> </div>`); </script>
+        </div>
+      </div>
+    </div>
+    
+      <script type="text/javascript">
+        $( document ).ready(function() {
+	        $('.order-summary__section--discount,.idme-btn-container').wrapAll('<div class="discounts" style="display: none;"></div>');
+          $( ".discounts" ).before( "<p class='open'>Apply a gift card or discount code</p>" );
+          
+          $( "p.open" ).click(function() {
+            $( ".discounts" ).toggle();
+            $( "p.open" ).toggle();
+          });
+		});
+      </script>
+      <style type="text/css">
+        .open, .discounts {
+          margin: 15px 0px;
+        }
+        
+        .open {
+          color: #29A6B9;
+          cursor: pointer;
+        }
+        
+        .idme-btn-container, .idme-modal, .idme-btn-verification {
+          font-family: Roboto, sans-serif;
+        }
+        
+        .idme-btn-affinity {
+          font-size: 14px;
+        }
+      </style>
+
+    {{ tracking_code }}
+  </body>
+</html>

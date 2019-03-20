@@ -1,0 +1,21 @@
+@import './modules/random.scss';
+@import './modules/ambassador.scss';
+
+/*================ TOOLS ================*/
+/*================ Mixins ================*/
+@import './tools/mixins.scss';
+/*================ SETTINGS ================*/
+/*================ Variables ================*/
+@import './settings/variables.scss';
+
+/*================ COMMON ================*/
+@import './global/normalize.scss';
+
+/*================ VENDOR ================*/
+@import './vendor/owl-carousel.min.scss';
+
+/*================ Home ================*/
+
+.test {
+    color: blue;
+}

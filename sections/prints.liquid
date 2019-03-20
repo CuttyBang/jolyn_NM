@@ -1,0 +1,116 @@
+<div data-section-id="{{ section.id }}" data-section-type="product" itemscope itemtype="http://schema.org/Product">
+
+  <section class="print-frame">
+
+    <div class="box">
+      <header>
+        <h1>Shop by Print</h1>
+        <aside>
+          <a href="/collections/all-prints">Shop All Prints &rarr;</a>
+        </aside>
+      </header>
+
+      <div class="swatch-container">
+        <ul class="print-swatches">
+          {% for block in section.blocks %}
+            <li>
+              <a href="{{ block.settings.url }}">
+                {% if block.settings.image %}
+                  <figure>
+                    <img src="{{ block.settings.image | img_url }}" alt="{{ block.settings.name }}">
+                  </figure>
+                {% endif %}
+
+                {% if block.settings.name %}
+                  <label>{{ block.settings.name }}</label>
+                {% endif %}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="box print-patrol">
+      <header>
+        <h2>Join the</h2>
+        <h1>Print Patrol</h1>
+      </header>
+
+      <img src="{{ 'print-patrol-2x.jpg' | asset_img_url: 'master' }}" width="184" height="360">
+
+      <p class="details">Join our Print Patrol to be the first on scene for our new prints.</p>
+
+      <form name="widget" onsubmit="printPatrolThankYou()" method="post" action="https://www.mozeo.com/hijk/customer/widget_advanced.php">
+
+      <label for="area">Mobile Number</label>
+
+      <div class="phone-row">
+
+        ( <input name="area" TYPE="text" id="area" size="5" maxlength="3" placeholder="XXX"/> )
+        <input name="three" type="text" id="three" size="5" maxlength="3" placeholder="XXX" /> -
+        <input name="four" type="text" id="four" size="7" maxlength="4" placeholder="XXXX"/>
+
+      </div>
+
+      <label for="PostalCode">Zip Code</label>
+      <input type="text" id="PostalCode" name="PostalCode" placeholder="Zip">
+
+      <input name="redirect" type="hidden" id="redirect" value="https://jolynclothing.com/collections/new-stuff"/>
+      <input type="hidden" name="Message" id="Message" value="Annnnnd that is it! Welcome to JOLYN print patrol - the most up to date source for new print drops,  local events and EXCLUSIVE STUFF!"/>
+
+      <input name="CustomerID" type="hidden" id="CustomerID" value="26819"/>
+      <input type="hidden" name="RegisterText" id="RegisterText" value="Yes"/>
+      <input type="hidden" name="hidden0" value="51977"/>
+      <input type="hidden" name="checkboxendpoint" value="0"/>
+      <input type="hidden" name="hiddenendpoint" value="1"/>
+      <input type="submit" name="Submit" value="Join" class="button2">
+
+      <input type="hidden" name="widgetID" id="widgetID" value=""/>
+      <script type="text/javascript" src="https://www.mozeo.com/widget.js"></script>
+
+      </form>
+
+      <p class="legal">Help: Text HELP to 24587, Opt out: <strong>Text STOP to 24587.</strong> Up to 10 msg/mo. Msg. &amp; data rates apply. <a href="http://www.mozeo.com/terms-conditions.html" target="_blank">Terms</a> | <a href="http://www.mozeo.com/privacypolicy.html" target="_blank">Privacy</a></p>
+
+    </div>
+  </section>
+</div>
+
+<script type="text/javascript">
+  function printPatrolThankYou(){
+    alert('We are excited you\'ve joined Print Patrol! Stay tuned for text updates on new prints and exciting JOLYN info!');
+  }
+</script>
+  <!-- https://help.shopify.com/themes/development/theme-editor/settings-schema -->
+
+{% schema %}
+  {
+    "name": "Prints",
+    "blocks": [
+      {
+        "type": "button",
+        "name": "Swatch",
+        "settings": [
+          {
+            "id": "image",
+            "type": "image_picker",
+            "label": "Print Swatch"
+          },
+          {
+            "id": "name",
+            "type": "text",
+            "label": "Print Name",
+            "placeholder": "Print Name"
+          },
+          {
+            "id": "url",
+            "type": "text",
+            "label": "Print Collection URL",
+            "placeholder": "http://"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

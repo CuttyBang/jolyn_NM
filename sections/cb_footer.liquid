@@ -1,0 +1,355 @@
+{%- assign social_icons = false -%}
+{%- assign inline_list = false -%}
+
+{%- case section.blocks.size -%}
+  {%- when 1 -%}
+    {%- assign footer_item = 'site-footer__item--full-width' -%}
+    {%- assign inline_list = true -%}
+  {%- when 2 -%}
+    {%- assign footer_item = 'site-footer__item--one-half' -%}
+    {%- assign inline_list = true -%}
+  {%- when 3 -%}
+    {%- assign footer_item = 'site-footer__item--one-third' -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'newsletter' -%}
+        {%- assign footer_item = 'site-footer__item--one-quarter' -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- when 4 -%}
+    {%- assign footer_item = 'site-footer__item--one-quarter' -%}
+  {%- when 5 -%}
+    {%- assign footer_item = 'site-footer__item--one-fifth' -%}
+{%- endcase -%}
+
+{% comment %} Create an appropriate hover color based on text color and brightness {% endcomment %}
+{%- assign footer_text_color = section.settings.color_footer_text -%}
+{%- assign footer_text_color_brightness = section.settings.color_footer_text | color_brightness -%}
+{%- if footer_text_color_brightness <= 26 -%}
+  {%- assign footer_text_color_hover = footer_text_color | color_lighten: 25 -%}
+{%- elsif footer_text_color_brightness <= 65 -%}
+  {%- assign footer_text_color_hover = footer_text_color | color_lighten: 15 -%}
+{%- else -%}
+  {%- assign footer_text_color_hover = footer_text_color | color_darken: 10 -%}
+{%- endif -%}
+
+<style>
+  .site-footer__hr {
+    border-bottom: 1px solid {{ section.settings.color_footer_bg | color_darken: 10 }};
+  }
+
+  .site-footer p,
+  .site-footer h4,
+  .site-footer small {
+    color: {{ section.settings.color_footer_text }};
+  }
+
+  .site-footer {
+    background-color: {{ section.settings.color_footer_bg }};
+  }
+
+  .site-footer a:hover {
+    color: {{ footer_text_color_hover }};
+  }
+  .cb_footerLogo {
+    margin-bottom: 20px;
+  }
+  .site-footer__social-icons li {
+    padding: 0 5px !important;
+  }
+  .flexible {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; }
+
+  .flexible-item {
+    padding: 5px;
+    margin-top: 10px; }
+
+  .flexible.noWrap {
+    display: flex;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; }
+
+  .flexible-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-wrap: nowrap; }
+
+  .flexible-left {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start; }
+
+  .flexible-right {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end; }
+
+  .flexible-center {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+</style>
+
+<footer class="site-footer" role="contentinfo">
+
+  <div class="page-width">
+    <div class="cb_footerLogo site-footer__item site-footer__item--one-fifth">
+      <img class=" lazyload js"
+           src="{{ section.settings.logo | img_url: '300x300' }}"
+           data-src="{{ img_url }}"
+           data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+           data-aspectratio="{{ section.settings.logo.aspect_ratio }}"
+           data-sizes="auto"
+           alt="{{ logo_alt | escape }}"
+           style="max-height: 25px">
+    </div>
+
+    <div class="site-footer__content">
+      {%- for block in section.blocks -%}
+
+        <div class="site-footer__item
+          site-footer-newsletter__one-fifth
+             {{ block.shopify_attributes }}>
+          <div class="site-footer__item-inner site-footer__item-inner--{{ block.type }}">
+
+            {%- if block.settings.title -%}
+              <p class="h4">{{ block.settings.title | escape }}</p>
+            {%- endif -%}
+
+            {%- case block.type -%}
+
+              {%- when 'link_list' -%}
+                {%- assign footer_linklist = block.settings.menu -%}
+                  <ul class="site-footer__linklist
+                            {% if inline_list %}list--inline{% endif %}">
+                    {%- for link in linklists[footer_linklist].links -%}
+                      <li class="site-footer__linklist-item">
+                        <a href="{{ link.url }}"
+                          {% if link.current %} aria-current="page"{% endif %}
+                        >
+                          {{ link.title | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+
+            {%- endcase -%}
+
+          </div>
+        </div>
+      {%- endfor -%}
+        <div id="cb_footerNewsletter">
+          <div class="cb_footerSocialIcons">
+            <div class="cb_footerItemHeader">
+              <p class="h4" style="text-transform: uppercase">Follow Us</p>
+            </div>
+            <ul class="list--inline site-footer__social-icons social-icons site-footer__icon-list">
+                <li>
+                  <a class="social-icons__link" href="{{ settings.social_facebook_link | escape }}" aria-describedby="a11y-external-message">
+                    {%- include 'icon-facebook' -%}
+                    <span class="icon__fallback-text">Facebook</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="social-icons__link" href="{{ settings.social_pinterest_link | escape }}" aria-describedby="a11y-external-message">
+                    {%- include 'icon-pinterest' -%}
+                    <span class="icon__fallback-text">Pinterest</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="social-icons__link" href="{{ settings.social_instagram_link | escape }}" aria-describedby="a11y-external-message">
+                    {%- include 'icon-instagram' -%}
+                    <span class="icon__fallback-text">Instagram</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="social-icons__link" href="{{ settings.social_youtube_link | escape }}" aria-describedby="a11y-external-message">
+                    {%- include 'icon-youtube' -%}
+                    <span class="icon__fallback-text">YouTube</span>
+                  </a>
+                </li>
+            </ul>
+          </div>
+          <div class="cb_footerNewsletterWrapper" style="border-bottom: 2px solid #000;">
+            <div class="cb_footerItemHeader">
+              <p class="h4" style="text-transform: uppercase; margin-bottom:5px;">{{ section.settings.newsletter_title }}</p>
+              <p style="font-size: 0.8em;">{{ section.settings.newsletter_text}}</p>
+            </div>
+            <div class="site-footer__newsletter
+                      {% if section.blocks.size == 1 %} site-footer__single-block--centered{% endif %}" style="padding-top: 1em;">
+
+              {%- assign formId = 'ContactFooter' -%}
+              {% form 'customer', id: formId, novalidate: 'novalidate' %}
+                {%- if form.posted_successfully? -%}
+                  <p class="form-message form-message--success" tabindex="-1" data-form-status>
+                    {{ 'general.newsletter_form.confirmation' | t }}
+                  </p>
+                {%- endif -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="flexible noWrap input-group {% if form.errors %} input-group--error{% endif %}">
+                  <input type="email" style="margin-bottom: 0;border: none;background: transparent;"
+                    name="contact[email]"
+                    id="{{ formId }}-email"
+                    class="input-group__field newsletter__input{% if form.errors %} input--error{% endif %}"
+                    value="(123) 456-7890"
+                    placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                    aria-label="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                    aria-required="true"
+                    required
+                    autocorrect="off"
+                    autocapitalize="off"
+                    {% if form.errors %}
+                      aria-invalid="true"
+                      aria-describedby="{{ formId }}-email-error"
+                      data-form-status
+                    {% endif %}>
+                  <span class="input-group__btn">
+                    <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe" style="background: transparent;color: #000;">
+                      <span style="font-size: 0.8em" class="newsletter__submit-text--large">Sign&nbsp;Up</span>
+                    </button>
+                  </span>
+                </div>
+                {% if form.errors contains 'email' %}
+                  <span id="{{ formId }}-email-error" class="input-error-message">
+                    {% include 'icon-error' %} {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.
+                  </span>
+                {% endif %}
+              {% endform %}
+            </div>
+          </div>
+
+        </div>
+
+    </div>
+  </div>
+
+  <hr class="site-footer__hr">
+
+      <div class="grid__item one-half small--one-whole">
+        {% if section.settings.show_payment_icons %}
+          <div class="grid__item site-footer__payment-icons">
+            {% unless shop.enabled_payment_types == empty %}
+              <span class="visually-hidden">{{ 'general.payment.method' | t }}</span>
+              <ul class="payment-icons list--inline site-footer__icon-list">
+                {% for type in shop.enabled_payment_types %}
+                  <li class="payment-icon">
+                    {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endunless %}
+          </div>
+        {% endif %}
+        <div>
+          <small class="site-footer__copyright-content">&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: '/' }}</small>
+          <small class="site-footer__copyright-content site-footer__copyright-content--powered-by">{{ powered_by_link }}</small>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Footer"
+  },
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": {
+        "en": "Logo image"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Payment methods"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Color"
+      }
+    },
+    {
+      "type": "color",
+      "id": "color_footer_bg",
+      "label": {
+        "en": "Background"
+      },
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "color_footer_text",
+      "label": {
+        "en": "Text"
+      },
+      "default": "#3d4246"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": {
+        "en": "Newsletter heading"
+      },
+      "default": "Receive Text Updates"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "label": {
+        "en": "Newsletter text"
+      },
+      "default": "Show your inbox some love! Enter your email to get the JOLYN 411 first."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": {
+
+        "en": "Menu"
+      },
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "en": "Heading"
+          },
+          "default": {
+            "en": "Quick links"
+          }
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": {
+            "en": "Menu"
+          },
+          "default": "footer"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

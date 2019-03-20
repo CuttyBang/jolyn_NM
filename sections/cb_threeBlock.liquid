@@ -1,0 +1,103 @@
+<div class="SS page-width">
+  <div class="SS collection-grid">
+    <ul class="SS grid grid--uniform">
+      {% for block in section.blocks limit: section.blocks.size %}
+        <li class="SS grid__item small--one medium-up--one-third" {{ block.shopify_attributes }}>
+        <div class="SS text-center">
+          
+        </div>
+          {% include 'cb_collectionThreeGridItem' %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if section.blocks.size == 0 %}
+    {% include 'no-blocks' %}
+  {% endif %}
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Three Item Block"
+  },
+  "class": "index-section",
+  "max_blocks": 3,
+  "settings": [
+
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": {
+        "en": "Collection"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image"
+          }
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": {
+            "en": "Button text"
+          },
+          "default": "See More"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": {
+            "en": "Button link"
+          }
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": {
+            "en": "Button text color"
+          },
+          "default": "#fff"
+        }, 
+        {
+          "type": "color",
+          "id": "button_background",
+          "label": {
+            "en": "Button background"
+          },
+          "default": "#ffd600"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Three Item Block"
+   
+      },
+      "category": {
+        "en": "Collection"
+      },
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

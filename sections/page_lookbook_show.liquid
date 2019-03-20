@@ -1,0 +1,133 @@
+<div data-section-id="{{ section.id }}" data-section-type="product" itemscope itemtype="http://schema.org/Product">
+
+  {{ 'lightgallery.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'lightgallery.js' | asset_url }}" defer="defer"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.imageGallery').lightSlider({
+        adaptiveHeight: true,
+        auto: true,
+        item: 1,
+        loop: true,
+        pause: 6000,
+        pauseOnHover: true,
+        speed: 800
+      });
+    });
+
+    $(function() {
+      $('.lazy').lazy();
+    });
+  </script>
+
+  <style type="text/css">
+    ul.imageGallery li > a > img {
+      width: 100%;
+    }
+
+    main header[role="banner"] {
+      display: none !important;
+    }
+
+    aside.filters {
+      display: none;
+    }
+
+  </style>
+  <!-- if collection.url | remove: "/collections/") = (collection.title | downcase) %} -->
+
+  {% assign j_url = collection.url | remove: "/collections/" | replace: '-', '' %}
+  {% assign j_title = collection.title | downcase | replace: ' ', '' %}
+  {% assign j_display_title = collection.title | remove: "Lookbook: " %}
+
+  <section class="page-lookbooks">
+    <div class="container">
+
+      <div class="crumb">
+        <a href="/">{% include 'icon-j-home' %} Home</a> <a href="/pages/lookbooks">Shop Lookbooks</a> <strong>{{ j_display_title }}</strong>
+      </div>
+      
+      <h1>{{ j_display_title }}</h1>
+    </div>
+    
+    <ul class="imageGallery">
+      {% for block in section.blocks %}
+        {% if block.settings.id == j_url %}
+          <li>
+            {% if block.settings.url != "" %}
+            <a href="{{ block.settings.url }}">
+            {% endif %}
+              <img src="{{ block.settings.image | img_url: 'master' }}">
+
+              {% comment %}
+                to reinstate lazyload at some point once we get the bugs worked out...
+                {% if forloop.first == true %}
+                  <img src="{{ block.settings.image | img_url: 'master' }}">
+                {% else %}
+                  <img class="lazy" data-src="{{ block.settings.image | img_url: 'master' }}">
+                {% endif %}
+              {% endcomment %}
+
+            {% if block.settings.url != "" %}
+            </a>
+            {% endif %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </section>
+  
+  <h1 class="in-lookbook">Featured in this Lookbook...</h1>
+</div>
+
+<style type="text/css">
+  @media (max-width: 767px) {
+    section.products > ul > li {
+      width: calc(50% - 1em);
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1440px) {
+    section.products > ul > li {
+      width: calc(25% - 1em);
+    }
+  }
+  @media (min-width: 1441px) {
+    section.products > ul > li {
+      width: calc(20% - 1em);
+    }
+  }
+</style>
+
+  <!-- https://help.shopify.com/themes/development/theme-editor/settings-schema -->
+
+{% schema %}
+  {
+    "name": "Lookbooks",
+    "blocks": [
+      {
+        "type": "button",
+        "name": "Image",
+        "settings": [
+          {
+            "id": "image",
+            "type": "image_picker",
+            "label": "Lookbook Image"
+          },
+          {
+            "id": "id",
+            "type": "text",
+            "label": "Lookbook ID",
+            "placeholder": "1"
+          },
+          {
+            "id": "url",
+            "type": "text",
+            "label": "Product URL",
+            "placeholder": "http://"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

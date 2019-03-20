@@ -1,0 +1,99 @@
+<style>
+
+img {
+  max-width: initial;
+}
+/* Contain floats: nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+/* Subnavigation styles */
+.subnav { clear: both; list-style-type: none; margin: 35px 0; padding: 0; }
+.subnav li { display: block; float: left; }
+.subnav li a {
+  display: block;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  background: #eee;
+  margin: 0 7px 7px 0;
+  color: #666;
+}
+.subnav li a:hover, .subnav li.active a {
+  background: #666;
+  color: #fff;
+}
+  
+  .page-collection {
+    flex-direction: column;
+  }
+</style>
+
+{% if collection.title contains "Lookbook: " %}
+
+  {% section 'page_lookbook_show' %}
+
+{% endif %}
+  <header role="banner" class="has-image" style="background-image: url({{ 'header-collections-index.jpg' | asset_img_url: '1440x' }};">
+<!--  <header role="banner" class="has-image" style="background-image: url({{ 'COLLECTION-november-sale.jpg' | asset_img_url: '1440x' }};"> -->
+
+    <h1>{{ page_title }}</h1>
+    <aside>
+    </aside>
+  </header>
+
+  <div class="container page-collection">
+
+    {{ page.content }}
+    
+    <section class="products">
+
+      {% comment %}
+        Loop through each collection, except 'frontpage'
+      {% endcomment %}
+      
+      {% if linklists[page.handle].links.size > 0 %}
+      	<ul>
+
+          {% for link in linklists[page.handle].links %}
+            {%- comment %}<locksmith:67ce>{% endcomment -%}
+              {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: link, locksmith_subject_parent: linklists[page.handle] %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif -%}
+            {%- comment %}</locksmith:67ce>{% endcomment -%}
+            {% if link.type == 'collection_link' %}
+                {% assign collection = link.object %}
+                {% unless collection.handle == 'frontpage' %}
+                  {% include 'collection-grid-item' %}
+                {% endunless %}
+            {% elsif link.type == 'product_link' %}
+              product code
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+      {% endif %}
+     
+  </section>
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  if ( $(window).width() < 768) {
+    $( "#filter-toggle" ).click(function() {
+      $( "aside.filters" ).toggle( "fast", function() {
+      });
+        $("#filter-toggle").toggleClass('active');
+
+    });
+  }
+});
+
+jQuery(document).on('click', 'a[href^="#"]', function (event) {
+    event.preventDefault();
+    $('html, body').animate({
+        scrollTop: $($.attr(this, 'href')).offset().top -131
+    }, 500);
+});
+</script>

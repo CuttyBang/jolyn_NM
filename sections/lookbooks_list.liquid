@@ -1,0 +1,60 @@
+<div data-section-id="{{ section.id }}" data-section-type="product" itemscope itemtype="http://schema.org/Product">
+
+  <section class="lookbooks cards box">
+    <header>
+      <h1>Shop Lookbooks <a href="/pages/lookbooks" style="color: #fff;">&nbsp;&nbsp;</a></h1>
+      <aside>
+        <!-- <a href="/pages/lookbooks-1">All Lookbooks &rarr;</a> -->
+      </aside>
+    </header>
+
+    <div class="lookbooks-container">
+      <ul class="">
+        {% for block in section.blocks %}
+          <li>
+            <a href="{{ block.settings.url }}" style="font-style: normal; background-image: url({{ block.settings.image | img_url: '640x' }});">
+
+              {% if block.settings.name %}
+                <h1>{{ block.settings.name }}</h1>
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </section>
+</div>
+
+  <!-- https://help.shopify.com/themes/development/theme-editor/settings-schema -->
+
+{% schema %}
+  {
+    "name": "Lookbooks",
+    "blocks": [
+      {
+        "type": "button",
+        "name": "Lookbook",
+        "settings": [
+          {
+            "id": "image",
+            "type": "image_picker",
+            "label": "Cover Photo"
+          },
+          {
+            "id": "name",
+            "type": "text",
+            "label": "Lookbook Name",
+            "placeholder": "Name"
+          },
+          {
+            "id": "url",
+            "type": "text",
+            "label": "Lookbook URL",
+            "placeholder": "http://"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

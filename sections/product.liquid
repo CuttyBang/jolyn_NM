@@ -1,0 +1,248 @@
+<div class="container" data-section-id="{{ section.id }}" data-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
+
+  {%- assign current_variant = product.selected_or_first_available_variant -%}
+  {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+  <meta itemprop="name" content="{{ product.title }}{% unless product.has_only_default_variant %} - {{ current_variant.title }}{% endunless %}">
+  <meta itemprop="url" content="{{ shop.url }}{{ current_variant.url }}">
+  <meta itemprop="brand" content="{{ product.vendor }}">
+  <meta itemprop="image" content="{{ featured_image | img_url: '600x600' }}">
+  <meta itemprop="description" content="{{ product.description | strip_html | escape }}">
+
+  <section class="product-summary">
+    <aside>
+
+      <!--<div style="display:none">-->
+      <a
+        href="{{ featured_image | img_url: '2048x2048' }}"
+        id="zoom"
+        class="MagicZoom featured-image"
+        data-product-featured-image
+      >
+        <img src="{{ featured_image | img_url: 'grande' }}" alt="{{ featured_image.alt | escape }}">
+      </a>
+
+      {% if product.tags contains "collection-member" %}
+        <style type="text/css">
+          ul.thumbs li:last-child {
+            display: none;
+          }
+        </style>
+      {% endif %}
+
+      {% if product.images.size > 1 %}
+        <ul class="thumbs">
+          {% for image in product.images %}
+            <li class="all_thumb {{image.alt | handleize}}" >
+              <a
+                href="{{ image.src | img_url: '2048x2048' }}"
+                data-options="zoomMode:off"
+                data-image="{{ image.src | img_url: 'grande' }}"
+                data-zoom-id="zoom"
+              >
+                <img src="{{ image.src | img_url: '160x160' }}" alt="{{ image.alt | escape }}">
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+        {% if product.images.size > 5 %}
+          <style type="text/css">
+            ul.thumbs li {
+              max-width: 50%;
+            }
+          </style>
+        {% endif %}
+      {% endif %}
+      <!--</div>-->
+      {% comment %}
+      {% include 'magiczoomplus' %}
+      {% endcomment %}
+    </aside>
+    <main>
+
+      <h1>
+        {{ product.title }}
+        <div class="wk-button-container" data-wk-product="{{ product.id }}">
+        	<!-- include 'wishlist-button-product' id: '{{ product.id }}' variant: '{{ product.selected_or_first_available_variant.id }}' -->
+        </div>
+      </h1>
+      <!-- <p>{{ product.vendor }}</p> -->
+
+      <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+        <meta itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+        <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+
+        <form action="/cart/add" method="post" class="product_form" enctype="multipart/form-data">
+          <div data-price-wrapper>
+            <span data-product-price{% if product.compare_at_price_max > product.price %} class="on-sale"{% endif %}>
+              {{ current_variant.price | money }}
+            </span>
+
+            {% if product.compare_at_price_max > product.price %}
+              <span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
+              <s data-compare-price>
+                {% if current_variant.compare_at_price > current_variant.price %}
+                  {{ current_variant.compare_at_price | money }}
+                {% endif %}
+              </s>
+            {% endif %}
+          </div>
+
+         <!-- start-swatch-code -->
+         {% include 'option-selection' %}
+         <!-- end-swatch-code -->
+
+          {% if product.available and product.variants.size > 1 %}
+            {% for option in product.options %}
+              {% include 'swatch' with option %}
+            {% endfor %}
+          {% endif %}
+
+          <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+          <div class="quantity-frame">
+            <input type="number" id="Quantity" name="quantity" class="quantity" value="1" min="1">
+          </div>
+
+          <div class="ctas">
+            <div class="primary">
+              <button
+                type="submit"
+                name="add"
+                class="btn add-to-cart"
+                data-add-to-cart
+                {% unless current_variant.available %}disabled="disabled"{% endunless %}>
+                  <span data-add-to-cart-text>
+                    {% if current_variant.available %}
+                      {{ 'products.product.add_to_cart' | t }}
+                    {% else %}
+                      {{ 'products.product.sold_out' | t }}
+                    {% endif %}
+                  </span>
+              </button>
+            </div>
+            
+            <div class="secondary">
+              <div class="wk-button-container" data-wk-product="{{ product.id }}">
+                  <!-- include 'wishlist-button-product' id: '{{ product.id }}' variant: '{{ product.selected_or_first_available_variant.id }}' -->
+              </div>
+              
+              {% comment %}
+              {% if product.title contains "Physical Gift Card" %}
+                <div style="display:none; " class="gwbutton"></div>
+              {%else%}
+               <div style="display:none; " class="gwbutton">Gift Instantly</div>
+              {%endif%}
+              {% endcomment %}
+           
+            </div>
+
+          </div>
+          
+          {% comment %}
+          {% unless product.tags contains "hidden" %}
+          <a href="#" id="BIS_trigger">Notify me when available</a>
+		  {% endunless %}
+          {% endcomment %}
+          
+          
+          
+          
+
+        </form>
+
+      </div>
+
+      <div class="rte product-description">
+        {{ product.description }}
+      </div>
+
+        {% if section.settings.show_share_buttons %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+        {% endif %}
+
+    </main>
+
+  <div id="recommendify-recent-products" shop="{{ shop.domain }}" product="{{ product.id }}"></div>
+   
+  </section>
+
+  
+
+    <div id="recommendify-similar-products" shop="{{ shop.domain }}" product="{{ product.id }}"></div>
+
+  
+
+
+
+  {% unless product == empty %}
+    <script type="application/json" data-product-json>
+      {{ product | json }}
+    </script>
+  {% endunless %}
+</div>
+
+  <div id="stamped-main-widget" class="stamped-main-widget"
+
+data-product-id="{{ product.id }}"
+data-name="{{ product.title | escape }}"
+data-url="{{ shop.url }}{{ product.url }}"
+data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}"
+data-description="{{ product.description | escape }}"
+data-product-sku="{{product.handle}}"
+       data-product-type="{{product.type}}">
+
+</div>
+
+<script>
+var mzOptions = {
+    hint: 'off'
+};
+
+$(function() {
+
+  $(".quantity-frame").append('<div class="dec num">-</div><div class="inc num">+</div>');
+
+  $(".num").on("click", function() {
+
+    var $num = $(this);
+    var oldValue = $num.parent().find(".quantity").val();
+
+    if ($num.text() == "+") {
+      var newVal = parseFloat(oldValue) + 1;
+    } else {
+     // Don't allow decrementing below zero
+      if (oldValue > 0) {
+        var newVal = parseFloat(oldValue) - 1;
+      } else {
+        newVal = 0;
+      }
+    }
+
+    $num.parent().find(".quantity").val(newVal);
+
+  });
+  
+});
+</script>
+
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+
+<div id="pixlee_container"></div><script type="text/javascript">window.PixleeAsyncInit = function() {Pixlee.init({apiKey:'h9iW3TzLCqsBbipEHx0'});Pixlee.addProductWidget({accountId:886, widgetId:998976, 'ecomm_platform': 'shopify','parent_category':true});};</script><script src="//assets.pixlee.com/assets/pixlee_widget_1_0_0.js"></script>
+
+<div id="recommendify-product-view" 
+shop="{{ shop.domain }}" product="{{ product.id }}"></div>
+
+{% schema %}
+  {
+    "name": "Product pages",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_share_buttons",
+        "label": "Show social sharing buttons",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

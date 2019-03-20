@@ -1,0 +1,144 @@
+{{ 'cb_carousel.scss' | asset_url | stylesheet_tag }}
+
+<style>
+
+</style>
+
+  {%- assign collection = collections[section.settings.cb_collection] -%}
+<div class="cb_carouselBlock" {% if section.settings.background_image %} data-bgset="{% include 'bgset', image: section.settings.background_image %}" data-sizes="auto" data-parent-fit="cover" style="background-position: center; background-size: cover; background-image: url('{{ section.settings.background_image | img_url: '1200x1200' }}'); background-repeat: no-repeat; padding: 0 0 25px;"{% endif %}}>
+  {% if section.settings.title != blank %}
+    <div class="section-header text-center">
+      <h1 class="cb_bextSellerHeading" style="margin-bottom: 0; padding-top: 50px;">{{ section.settings.title | escape }}</h1>
+    </div>
+    {% if section.settings.subtitle != blank %}
+      <div  class="cb_bextSellerSubtitle" style="text-align: center;font-weight: 600; margin-top: -2em;color:{{ section.settings.subtitle_color }} !important;">
+        {{ section.settings.subtitle }}
+      </div>
+    {% endif %}
+  {% endif %}
+  <div class="page-width cb_carousel" style="padding: 25px 50px;display: flex;justify-content: center;">
+    <div class="owl-carousel">
+      {% for product in collection.products %}
+        <div id="" class="grid-view-item__image-wrapper product-card__image-wrapper js" style="padding-top:0;">
+          <div style="padding-top: 0">
+            <img src="{{ product.featured_image | img_url: '1200x1200' }}" />
+           </div>
+        </div>
+      {%endfor%}
+    </div>
+
+  </div>
+  <div class="cb_bestSellersButton">
+      <a href="{{ collection.url }}" class="SS btn" style="margin: 0 auto 25px;padding: 15px 45px; background-color:{{section.settings.button_background}} !important;color: {{section.settings.button_text_color}} !important;">
+        {{ section.settings.button_text | escape }}
+      </a>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Carousel Block"
+  },
+  "class": "index-section index-section--flush",
+  "settings": [
+    {
+      "id": "cb_collection",
+      "type": "collection",
+      "label": {
+        "en": "Collection"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "en": "Headline"
+      }
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": {
+        "en": "Headline color"
+      },
+      "default": "#000"
+     },
+     {
+       "type": "text",
+       "id": "subtitle",
+       "label": {
+         "en": "Subtitle"
+       },
+       "default": {
+         "en": "Subtitle text"
+       }
+     },
+     {
+       "type": "color",
+       "id": "subtitle_color",
+       "label": {
+         "en": "Subtitle color"
+       },
+       "default": "#000"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": {
+        "en": "Image"
+      }
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": {
+        "en": "Button text"
+      },
+      "default": "See More"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": {
+        "en": "Button text color"
+      },
+      "default": "#fff"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": {
+        "en": "Button link"
+      }
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": {
+        "en": "Button background"
+      },
+      "default": "#ffd600"
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Promo Carousel"
+      },
+      "category": {
+        "en": "Image"
+      }
+    }
+  ]
+}
+
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+
+{% endjavascript %}

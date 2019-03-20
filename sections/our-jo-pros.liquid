@@ -1,0 +1,67 @@
+
+{% assign _section = section.settings %}
+
+{% assign blog = blogs[_section.ojp_blog] %}
+
+<section id="our_jo_pros">
+    <div class="ojp_hero" style="background-image: url({{ _section.hero_img | img_url: '1200x' }});">
+         
+    </div>
+    <div class="ojp_main_content">
+        <div class="ojp_title">
+            <h2 class="title">{{ _section.page_title }}</h2>
+            <p>{{ _section.subtitle_pargraph }}</p>
+        </div>
+        <div class="ojp_pros">
+
+            {% paginate blog.articles by 12 %}
+                {% for article in blog.articles %}
+
+                    <div class="pro">
+                        <div class="pro_thumb">
+                            <a href="{{ article.url }}" ><img src="{{ article.image.src | img_url: '500x' }}"></a>
+                        </div>
+                        <div class="pro_desc">
+                            <span class="pro_name">{{ article.title }}</span>
+                            <span class="pro_title">{{ article.content }}</span>
+                            <a href="http://instagram.com/_u/{{ article.metafields.instagram.handle }}/" class="pro_social">@{{ article.metafields.instagram.handle }}</a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% endpaginate %}
+
+        </div>
+    </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Our Jo Pros",
+    "settings": [
+        {
+            "type": "blog",
+            "id": "ojp_blog",
+            "label": "Our Jo Pros Blog", 
+            "info": "Our Jo Pros Blog"
+        },
+        {
+            "type": "image_picker",
+            "id": "hero_img",
+            "label": "Hero Image"
+        },
+        {
+            "type": "text",
+            "id": "page_title",
+            "label": "Page Title",
+            "default": "Our Jo Pros"
+        },
+        {
+            "type": "text",
+            "id": "subtitle_pargraph",
+            "label": "Subtitle Paragraph",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at imperdiet augue. Aliquam finibus elementum imperdiet. Morbi vel augue eget lectus vehicula tristique."
+        }
+    ]
+  }
+{% endschema %}

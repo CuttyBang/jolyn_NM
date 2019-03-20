@@ -1,0 +1,255 @@
+  // start ambassador pages
+  .enap-gallery {
+    float: none !important;
+  }
+  
+  .mobile-only {
+    @media (min-width: 768px) {
+      display: none !important;
+    }
+  }
+  
+  body[id^='ambassador-'],
+  body[id^='jopro-']{
+    main {
+      .container {
+        position: relative;
+        
+        header {
+          position: absolute;
+          z-index: 10;
+          top: 70px;
+          
+          @media (min-width: 768px) {
+              left: 70px;
+          }
+          
+          @media (max-width: 767px) {
+            left: 0;
+            right: 0;
+            text-align: center;
+          }
+          
+          h1 {
+            color: #fff;
+            text-shadow: 0 1px 10px rgba(0,0,0,.25);
+          }
+        }
+        
+        .rte .columns > div > p > img {
+          position: absolute;
+        }
+        
+        .columns {
+          
+          @media (max-width: 767px) {
+            flex-direction: column;
+          }
+          
+          h1, aside {
+            //padding-top: 320px;
+          }
+          
+          h1 {
+            margin-top: 2em;
+            
+            @media (min-width: 768px) {
+              margin-left: 1.75em;
+            }
+          }
+          
+          h1 + p {
+            @media (min-width: 768px) {
+              margin-left: 4em;
+            }
+          }
+        }
+        
+        @media (max-width: 767px) and (min-width: 500px) {
+          section.products>ul>li {
+            width: calc(33% - 1em);
+          }
+        }
+        
+        @media (max-width: 1440px) and (min-width: 768px) {
+          section.products>ul>li {
+            width: calc(25% - 1em);
+          }
+        }
+      }
+    }
+    
+    .enap-overlay-content {
+      padding: 0 1em;
+    }
+    
+    section.products {
+      clear: both;
+      padding-top: 2em;
+    }
+    
+    p {
+      line-height: 1.5em;
+    }
+  }
+  
+  ul.ambassadors-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    @media (max-width: 767px) {
+      flex-direction: column;
+    }
+    
+    li {
+      @media (min-width: 768px) {
+        flex: 0 0 50%;
+        a {
+            min-height: 300px;
+        }
+      }
+      @media (max-width: 767px) {
+        flex: 1;
+        a {
+          min-height: 200px;
+        }
+      }
+      list-style: none;
+      padding: .5rem;
+      
+      a {
+        align-items: flex-end;
+        background-size: cover;
+        color: #fff;
+        display: flex;
+        position: relative;
+        
+        &:after {
+          background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+          content: "";
+          height: 60px;
+          left: 0;
+          position: absolute;
+          width: 100%;
+        }
+        
+        &[href="/pages/jopro-betsi-flint"],
+        &[href="/pages/jopro-lauren-fendrick"] {
+          background-position: top right;
+        }
+        
+        &[href="/pages/jopro-kelley-larsen"] {
+          background-position: center center;
+        }
+      }
+      
+      h1 {
+        padding: 1rem;
+        position: relative;
+        z-index: 2;
+      }
+    }
+  }
+  
+  .divider {
+    text-align: center;
+  }
+  
+  .divider svg {
+    height: 22px;
+    opacity: .4;
+    width: 22px;
+  }
+  
+  
+  main .container .rte {
+    .columns {
+      display: flex;
+      
+      > div > p:first-child {
+        margin-left: -1em;
+      }
+      
+      div {
+        flex: 1;
+      }
+      
+      aside {
+        flex: 0 0 300px;
+        
+        @media (min-width: 768px) {
+          margin-left: 4em;
+          margin-right: 4em;
+        }
+        
+        @media (max-width: 767px) {
+          padding-top: 0 !important;
+        }
+        
+        .quote-frame {
+          margin: 0 auto;
+          max-width: 300px;
+          padding: 1em;
+        }
+        
+        blockquote {
+          color: #777;
+          font-family: Georgia;
+          font-size: 24px;
+          font-style: italic;
+          line-height: 1.25em;
+          margin: 0;
+          padding: .25em 1.5em;
+          position: relative;
+          text-align: center;
+          
+          &:before,
+          &:after {
+            color: #ccc;
+            font-family: Georgia;
+            font-size: 36px;
+            position: absolute;
+          }
+          
+          &:before {
+            left: 0;
+            content: '"';
+            top: 0;
+          }
+          
+          &:after {
+            bottom: 0;
+            content: '"';
+            right: 0;
+          }
+        }
+        
+        span {
+          color: #555;
+          display: block;
+          text-align: center;
+        }
+      }
+      
+      .facts {
+        background: #eee;
+        border-radius: 5px;
+        margin-bottom: 1em;
+        padding: 1em 1em .5em;
+        
+        @media (min-width: 768px) {
+            margin-top: 5em;
+        }
+        
+        ul {
+          padding-left: 0;
+          
+          li:not(:first-child) {
+            padding-top: .25em;
+          }
+        }
+      }
+    }
+  }
+  
+  // end ambassador pages

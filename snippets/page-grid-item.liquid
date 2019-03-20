@@ -1,0 +1,47 @@
+{% comment %}
+  This snippet is used to showcase each collection during the loop,
+  'for product in collection.products' in list-collections.liquid.
+{% endcomment %}
+
+{% assign delayTime = 200 | times : forloop.index %}
+<li>
+
+  {% comment %}
+    Use capture to put the collection title in a variable that is used in liquid filters
+  {% endcomment %}
+
+  {% capture collection_title %}{{ page.title | escape }}{% endcapture %}
+    <a href="{{ page.url }}" title="{{ page_title }}">
+      {{ page.content }}!!
+      {% if page.image %}
+        {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
+        {% if collection.metafields.colRolloverImg.image and settings.plus_enable_list_collection_grid_rollover %}
+          <img class="rollover hide" src="{{ collection.metafields.colRolloverImg.image }}" alt="{{ collection_title }} rollover image">
+        {% endif %}
+      {% else %}
+        {{ collection.products.first.featured_image | product_img_url: 'large' | img_tag: collection_title }}
+        {% if collection.metafields.colRolloverImg.image and settings.plus_enable_list_collection_grid_rollover %}
+          <img class="rollover hide" src="{{ collection.metafields.colRolloverImg.image }}" alt="{{ collection_title }} rollover image">
+        {% endif %}
+      {% endif %}
+    </a>
+
+    <div class="details">
+      <h3><a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">{{ collection.title }}</a></h3>
+      <div class="price">&nbsp;</div>
+    </div>
+</li>
+
+<style type="text/css">
+@media (max-width: 1440px) and (min-width: 1200px) {
+  section.products > ul > li {
+    width: calc(25% - 1em);
+  }
+}
+
+.details h3 {
+  font-size: 18px !important;
+  padding-bottom: .25em;
+  text-align: center;
+}
+</style>

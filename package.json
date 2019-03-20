@@ -1,0 +1,29 @@
+{
+  "name": "jolyn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "parcel-js": "parcel watch scripts/theme.js --out-dir assets --out-file theme.js",
+    "watch": "node run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scoutside/jolyn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scoutside/jolyn/issues"
+  },
+  "homepage": "https://github.com/scoutside/jolyn#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "concurrently": "^4.1.0",
+    "node-sass": "^4.11.0"
+  }
+}

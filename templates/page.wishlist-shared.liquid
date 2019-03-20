@@ -1,0 +1,19 @@
+<style>
+  {{ page.metafields.global.extra_css }}
+</style>  
+<div class="container page-container">
+  <header class="page-header-box">
+    <h1>{{ page.title }}</h1>
+  </header>
+
+  <div class="rte">
+    {{ page.content }} <!-- include 'wishlist-shared' -->
+  </div>
+
+  {% if page.title == "Lookbooks" %}
+
+    {% section 'page_lookbooks' %}
+
+  {% endif %}
+
+</div>
