@@ -67,8 +67,8 @@
             </a>
           {% endif %}
           {% if section.settings.subtitle != blank %}
-            <div style="position: relative; top: 0; left: 0;">
-              <div class="cb_subtitleTextWrapper"  style="-webkit-transform:skewX(-12deg);transform: kewX(-12deg);position: absolute; top: 40vh; left: 25px;font-weight: 600;color:{{ section.settings.subtitle_color }} !important;background-color: {{ section.settings.subtitle_background }} !important;padding: 0.5em 1em;">
+            <div class="cb_heroSubtitle" style="position: relative; top: 0; left: 0;">
+              <div class="cb_subtitleTextWrapper"  style="-webkit-transform:skewX(-12deg);transform: kewX(-12deg);position: absolute; left: 15px;font-weight: 600;color:{{ section.settings.subtitle_color }} !important;background-color: {{ section.settings.subtitle_background }} !important;padding: 0.5em 1em;">
                 {{ section.settings.subtitle }}
               </div>
             </div>

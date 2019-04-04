@@ -38,6 +38,8 @@
         }
       </style>
 
+{%- case block.name -%}
+  {%- when 'Bold' -%}
       {% if section.settings.message_link == blank %}
         <div class="announcement-bar">
       {% else %}
@@ -54,72 +56,93 @@
         </a>
       {% endif %}
 
+<!-- {%- when 'Split' -%}
+
+{%- when 'Simple' -%} -->
+
+
+{%- endcase -%}
+
+
     {% endif %}
   {% endif %}
-{% schema %}
-{
-  "name": {
-    "en": "Promo Bar"
-  },
-  "settings": [
-    {
-      "type": "header",
-      "content": {
-        "en": "Announcement bar"
+
+  {
+    "name": {
+      "en": "Promo Bar"
+    },
+    "max_blocks": 3,
+    "settings": [
+      {
+        "type": "header",
+        "content": {
+          "en": "Announcement bar"
+        }
+      },
+      {
+        "type": "checkbox",
+        "id": "message",
+        "label": {
+          "en": "Show announcement"
+        },
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "home_page_only",
+        "label": {
+          "en": "Home page only"
+        },
+        "default": true
       }
-    },
-    {
-      "type": "checkbox",
-      "id": "message",
-      "label": {
-        "en": "Show announcement"
-      },
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "home_page_only",
-      "label": {
-        "en": "Home page only"
-      },
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "message_text",
-      "label": {
-        "en": "Text"
-      },
-      "default": {
-        "en": "Announce something here"
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "limit": 1,
+        "name": {
+          "en": "Bold"
+        },
+        "settings": [
+          {
+            "type": "text",
+            "id": "message_text",
+            "label": {
+              "en": "Text"
+            },
+            "default": {
+              "en": "Announce something here"
+            }
+          },
+          {
+            "type": "url",
+            "id": "message_link",
+            "label": {
+              "en": "Link"
+            },
+            "info": {
+              "en": "Optional"
+            }
+          },
+          {
+            "type": "color",
+            "id": "color_bg",
+            "label": {
+              "en": "Bar"
+            },
+            "default": "#7796a8"
+          },
+          {
+            "type": "color",
+            "id": "color_text",
+            "label": {
+              "en": "Text"
+            },
+            "default": "#fff"
+          }
+        ]
       }
-    },
-    {
-      "type": "url",
-      "id": "message_link",
-      "label": {
-        "en": "Link"
-      },
-      "info": {
-        "en": "Optional"
-      }
-    },
-    {
-      "type": "color",
-      "id": "color_bg",
-      "label": {
-        "en": "Bar"
-      },
-      "default": "#7796a8"
-    },
-    {
-      "type": "color",
-      "id": "color_text",
-      "label": {
-        "en": "Text"
-      },
-      "default": "#fff"
-    }
-  ]
-}
-{% endschema %}
+    ]
+
+
+  }
